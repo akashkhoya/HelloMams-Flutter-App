@@ -42,7 +42,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.beinglearner.beinglearners"
+        applicationId "com.vivek.hellomams"
         minSdkVersion 19
         targetSdkVersion 30
         multiDexEnabled true
