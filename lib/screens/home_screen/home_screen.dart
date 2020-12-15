@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_page_transition/flutter_page_transition.dart';
 import 'package:flutter_page_transition/page_transition_type.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'home_screen_presenter.dart';
 
@@ -35,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
   int category_listSize = 0 ;
   String _email="";
   String name="";
-  bool status = false;
+  String status = 'false';
   String category_name ='';
   String category_id ='';
 
@@ -173,15 +174,6 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                 child: new Center(
                     child: new Column(
                       children: <Widget>[
-                        Container(
-                          height: 120,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage('images/logo_transparent.png')
-                              )
-                          ),
-                          // child: new Image.asset('images/logo_transparent.png',),
-                        ),
                         new Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -265,8 +257,15 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
       },
     );
   }
+
+  sharepref(String data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('login_status', data);
+  }
+
   void logout(){
-    new SharedPreferencesClass().setloginstatus(false);
+    sharepref('false');
+    // new SharedPreferencesClass().setloginstatus('false');
     Navigator.pushReplacement(context, PageTransition(type:PageTransitionType.custom, duration: Duration(seconds: 0), child: LoginPage()));
   }
   @override
@@ -299,6 +298,19 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
       ),
       drawer: drawer(),
       body: widget_body(),
+          bottomNavigationBar: new Container(
+            height: 70,
+            decoration: BoxDecoration(
+              color: ColorStyle().color_red,
+             /* image: DecorationImage(
+                  image: AssetImage('images/massage.jpg'),fit: BoxFit.fill)*/
+            ),
+            width: MediaQuery.of(context).size.width,
+            child: new Center(
+              child: new Text('Welcome in Hello mams !',
+              style: new TextStyle(fontSize: 23,color: ColorStyle().color_white,fontWeight: FontWeight.bold),),
+            )
+          ),
     ),
     );
   }
@@ -335,30 +347,47 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
               ),
             ),
             new Container(
-              height: 230,
+              height: 200,
               child: new ListView.builder(
                   itemCount: slider_listSize,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context,index){
-                    return  new Container(
-                      height: 200,
-                      width: MediaQuery.of(context).size.width/1.2,
-                      child: new Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
+                    return  new Stack(
+                      children: <Widget>[
+                        new Container(
+                          height: 200,
+                          width: MediaQuery.of(context).size.width/1.2,
+                          child: new Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              margin: EdgeInsets.all(10),
+                              elevation: 5,
+                              child: new ClipRRect(
+                                borderRadius: BorderRadius.circular(15.0),
+                                child: new Image.network(RestDataSource.BASE_URL+slider_List[index].sliderImg,fit: BoxFit.fill,),
+                              )
                           ),
+                        ),
+                        new Container(
+                          width: MediaQuery.of(context).size.width/1.27,
                           margin: EdgeInsets.all(10),
-                          elevation: 5,
-                          child: new ClipRRect(
-                            borderRadius: BorderRadius.circular(15.0),
-                            child: new Image.network(RestDataSource.BASE_URL+slider_List[index].sliderImg,fit: BoxFit.fill,),
-                          )
-                      ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            color: Colors.black54,
+                          ),
+
+                          child: new Center(
+                            child: new Text(slider_List[index].sliderName,
+                            style: new TextStyle(color: ColorStyle().color_white,fontWeight: FontWeight.bold,fontSize: 17),)
+                          ),
+                        )
+                      ],
                     );
                   }),
             ),
             new Container(
-                height: 400,
+                height: 300,
                 padding: EdgeInsets.only(bottom: 30),
                 child: GridView.count(
                   physics: NeverScrollableScrollPhysics(),
@@ -377,16 +406,58 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                               borderRadius: BorderRadius.circular(8.0),
                             ),
                             color: Colors.blue,
-                            child: new Container(
-                                decoration: new BoxDecoration(
-                                    color: Colors.black54,
-                                    borderRadius: BorderRadius.all(Radius.circular(12))
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.all(Radius.circular(7)),
-                                  child: Image.network(RestDataSource.BASE_URL+category_List[index].categoryIMG),
-                                )
+                            child: new Stack(
+                              children: <Widget>[
+                                new Container(
+                                  height: 180,
+                                    decoration: new BoxDecoration(
+                                        color: Colors.black54,
+                                        borderRadius: BorderRadius.all(Radius.circular(12))
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(7)),
+                                      child: Image.network(RestDataSource.BASE_URL+category_List[index].categoryIMG,
+                                        fit: BoxFit.fill,),
+                                    )
 
+                                ),
+                                new Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: new BoxDecoration(
+                                      color: Colors.black38,
+                                      borderRadius: BorderRadius.all(Radius.circular(12))
+                                  ),
+                                  child: new Column(
+                                    children: <Widget>[
+                                      new Row(
+                                        children: <Widget>[
+                                          new Container(
+
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(6)),
+                                              color: Colors.green,
+                                            ),
+                                            padding: EdgeInsets.all(4),
+                                            child: new Text(category_List[index].categoryType,
+                                              style: new TextStyle(fontSize: 13,color: ColorStyle().color_white,fontWeight: FontWeight.bold),),
+                                          ),
+                                        ],
+                                      ),
+                                      new Padding(padding: EdgeInsets.only(top: 70)),
+                                      new Container(
+                                        padding: EdgeInsets.only(left: 4),
+                                        child: new Text(category_List[index].categoryName,
+                                          style: new TextStyle(fontSize: 15,color: ColorStyle().color_white,fontWeight: FontWeight.bold),),
+                                      ),
+                                      new Container(
+                                        padding: EdgeInsets.only(left: 4),
+                                        child: new Text(category_List[index].categoryCost+' / '+category_List[index].categoryDuration,
+                                          style: new TextStyle(fontSize: 13,color: ColorStyle().color_white,fontWeight: FontWeight.bold),),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
                             )
                         ),
                       )

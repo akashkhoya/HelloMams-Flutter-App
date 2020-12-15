@@ -12,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_page_transition/flutter_page_transition.dart';
 import 'package:intro_slider/intro_slider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 String _loginId, _loginPassword;
 String  _emailError, _mobileError, _passwordError,name,joinedat,username,token;
@@ -253,6 +254,12 @@ class _LoginPageState extends State<LoginPage> implements LoginScreenContract {
       },
     );
   }
+
+  sharepref(String data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('login_status', data);
+  }
+
   void _openPage(){
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
         HomeScreen()), (Route<dynamic> route) => false);
@@ -467,6 +474,8 @@ class _LoginPageState extends State<LoginPage> implements LoginScreenContract {
     // TODO: implement onClientLoginSuccess
     _onLoading(false);
     if(response.statusCode== 200){
+      new SharedPreferencesClass().setloginstatus('true');
+      sharepref('true');
       _openPage();
     }else{
       dialogs('');

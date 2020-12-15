@@ -7,7 +7,7 @@ class ColorStyle {
   final Color color_white = const Color(0xFFFFFFFF);
   final Color color_gray = const Color(0xFFD9D9D9);
   final Color color_gray_light = const Color(0xFFA9A9A9);
-  final Color color_red = const Color(0xffef4545);
+  final Color color_red = const Color(0xffD03412);
   final Color color_royal_blue= Color(0xff191970);
   final Color color_logo= Color(0xff55585F);
 

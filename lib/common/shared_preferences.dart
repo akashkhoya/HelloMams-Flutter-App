@@ -3,13 +3,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesClass{
 
-  Future<void> setloginstatus(bool status) async {
+  Future<void> setloginstatus(String status) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('login_status',status);
+    prefs.setString('login_status',status);
   }
-  Future<bool>getloginstatus() async {
+  Future<String>getloginstatus() async {
     SharedPreferences getloginprefs = await SharedPreferences.getInstance();
-     return getloginprefs.getBool('login_status');
+     return getloginprefs.getString('login_status');
   }
 
   Future<void> setEmail(String email) async {

@@ -76,6 +76,7 @@ flutter:
     - images/b3.jpg
     - images/loading_img.gif
     - images/data_not_found.gif
+    - images/massage.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

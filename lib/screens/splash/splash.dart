@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:beinglearners/common/colors.dart';
+import 'package:beinglearners/common/shared_preferences.dart';
 import 'package:beinglearners/screens/home_screen/home_screen.dart';
 import 'package:beinglearners/screens/login_screen/login_screen.dart';
 import 'package:clippy_flutter/diagonal.dart';
@@ -7,6 +10,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_page_transition/flutter_page_transition.dart';
 import 'package:intro_slider/intro_slider.dart';
 import 'package:intro_slider/slide_object.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+String loginstatus;
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -48,9 +54,20 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  void onDonePress() async{
+  sharepref() async {
+    final prefs = await SharedPreferences.getInstance();
+    loginstatus= prefs.getString('login_status');
+  }
 
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (__)=>HomeScreen()));
+  void onDonePress() async{
+    sharepref();
+    if(loginstatus=='true'){
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (BuildContext context) => HomeScreen()));
+    }else{
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (__)=>LoginPage()));
+    }
+   print(loginstatus);
     // TODO: go to next screen
   }
 
