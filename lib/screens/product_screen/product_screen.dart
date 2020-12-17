@@ -167,34 +167,54 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
       child: new Column(
         children: <Widget>[
           sub_cate_listSize==0?new Container():new Container(
-            height: 50,
+            height: 55,
             width: MediaQuery.of(context).size.width,
             color:ColorStyle().color_red,
-            child: new ListView.builder(
-                itemCount: sub_cate_List.length,
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                itemBuilder: (context,index){
-                  return new GestureDetector(
-                    onTap: (){
-                      setState(() {
-                        click_id =sub_cate_List[index].id;
-                      });
-                      loadingStatus=true;
-                      _presenter.getProduct(sub_cate_List[index].categoryID,sub_cate_List[index].id);
-                    },
-                    child: new Container(
-                        margin: EdgeInsets.only(left: 10,right: 10),
+            child: new Container(
+              padding: EdgeInsets.only(top: 5,bottom: 5),
+              child: new ListView.builder(
+                  itemCount: sub_cate_List.length,
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemBuilder: (context,index){
+                    return new GestureDetector(
+                        onTap: (){
+                          setState(() {
+                            click_id =sub_cate_List[index].id;
+                          });
+                          loadingStatus=true;
+                          _presenter.getProduct(sub_cate_List[index].categoryID,sub_cate_List[index].id);
+                        },
                         child: new Container(
-                          child: new Center(
-                            child: new Text(sub_cate_List[index].subCategoryName,
-                              style: new TextStyle(color:click_id==sub_cate_List[index].id? ColorStyle().color_black:ColorStyle().color_white,
-                                  fontSize: 18,fontWeight: FontWeight.bold),),
-                          ),
+                            height: 25,
+                            margin: EdgeInsets.only(left: 10,right: 10),
+                            child: click_id==sub_cate_List[index].id?
+                            new Card(
+                                elevation: 7,
+                                color: ColorStyle().color_red,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                ),
+                                child: new Container(
+                                  padding: EdgeInsets.only(left: 16,right: 16),
+                                  child: new Center(
+                                    child: new Text(sub_cate_List[index].subCategoryName,
+                                      style: new TextStyle(color: ColorStyle().color_white,
+                                          fontSize: 16,fontWeight: FontWeight.bold),),
+                                  ),
+                                )
+                            ):
+                            new Container(
+                              child: new Center(
+                                child: new Text(sub_cate_List[index].subCategoryName,
+                                  style: new TextStyle(color: ColorStyle().color_white,
+                                      fontSize: 16,fontWeight: FontWeight.bold),),
+                              ),
+                            )
                         )
-                    )
-                  );
-                }),
+                    );
+                  }),
+            )
           ),
 
           new Expanded(

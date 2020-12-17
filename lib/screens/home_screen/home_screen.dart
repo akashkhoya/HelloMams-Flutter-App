@@ -8,6 +8,7 @@ import 'package:beinglearners/model/slider.dart';
 import 'package:beinglearners/screens/edit_profile/edit_profile.dart';
 import 'package:beinglearners/screens/login_screen/login_screen.dart';
 import 'package:beinglearners/screens/product_screen/product_screen.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_page_transition/flutter_page_transition.dart';
@@ -23,6 +24,8 @@ List<Value> slider_List ;
 List<ListData> category_List ;
 bool appBarStatus =true;
 int bgColor =0;
+int _current = 0;
+int _current_index = 0;
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 class HomeScreen extends StatefulWidget {
   @override
@@ -147,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                       leading: Icon(Icons.power_settings_new),
                       onTap: (){
                         Navigator.pop(context);
-                        dialogs('Are You Logout');
+                        dialogs('Are you sure you want to log out?');
                       },
                     ),
 
@@ -167,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
       context: context,
       builder: (BuildContext context) {
         return Padding(
-          padding: new EdgeInsets.only(top: MediaQuery.of(context).size.height/4,bottom: MediaQuery.of(context).size.height/4),
+          padding: new EdgeInsets.only(top: MediaQuery.of(context).size.height/3,bottom: MediaQuery.of(context).size.height/3),
           child: AlertDialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
             content:  new Container(
@@ -182,7 +185,8 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                                 width:200,
                                 child: new Center(
                                   child: new Text(mesg,
-                                    style: new TextStyle(color: new ColorStyle().color_royal_blue,fontSize: 17,fontWeight: FontWeight.bold),),
+                                    style: new TextStyle(color: new ColorStyle().color_royal_blue,fontSize: 17,fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.center,),
                                 )
                             )
                           ],
@@ -265,7 +269,6 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
 
   void logout(){
     sharepref('false');
-    // new SharedPreferencesClass().setloginstatus('false');
     Navigator.pushReplacement(context, PageTransition(type:PageTransitionType.custom, duration: Duration(seconds: 0), child: LoginPage()));
   }
   @override
@@ -275,6 +278,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
       //resizeToAvoidBottomPadding: false,
       appBar: new AppBar(
         elevation: 0.0,
+        centerTitle: true,
         backgroundColor: new ColorStyle().color_red,
         title: new Container(
           padding: EdgeInsets.only(left: 10),
@@ -284,6 +288,19 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
         ),
 
         actions: <Widget>[
+          new SizedBox(
+            height: 30,
+            child: new Container(
+                height: 30,
+                width: 40,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(50)),
+                ),
+                child: new Center(
+                  child: new Icon(Icons.account_circle,size: 27,),
+                )
+            )
+          ),
           IconButton(
             icon: Icon(Icons.search,
               color: new ColorStyle().color_white,
@@ -299,16 +316,16 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
       drawer: drawer(),
       body: widget_body(),
           bottomNavigationBar: new Container(
-            height: 70,
+            height: 60,
+            margin: EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: ColorStyle().color_red,
-             /* image: DecorationImage(
-                  image: AssetImage('images/massage.jpg'),fit: BoxFit.fill)*/
+              color: Colors.black54,
+             borderRadius: BorderRadius.all(Radius.circular(7))
             ),
             width: MediaQuery.of(context).size.width,
             child: new Center(
-              child: new Text('Welcome in Hello mams !',
-              style: new TextStyle(fontSize: 23,color: ColorStyle().color_white,fontWeight: FontWeight.bold),),
+              child: new Text('Welcome to Hello mams',
+              style: new TextStyle(fontSize: 19,color: ColorStyle().color_white,fontWeight: FontWeight.bold),),
             )
           ),
     ),
@@ -326,7 +343,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
         color: new ColorStyle().color_white,
         child: new ListView(
           children: <Widget>[
-            new Container(
+           /* new Container(
               height: 40,
               color: new ColorStyle().color_red,
               child: new Column(
@@ -345,10 +362,64 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                   )
                 ],
               ),
-            ),
+            ),*/
             new Container(
               height: 200,
-              child: new ListView.builder(
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  autoPlay: true,
+                  aspectRatio: 2.0,
+                  enlargeCenterPage: true,
+                  pageSnapping: true,
+                  viewportFraction: 1.0,
+                ),
+                items: slider_List.map((item){
+                  return Container(
+                      child: new Stack(
+                        children: <Widget>[
+                          new Container(
+                            height: 200,
+                            width: MediaQuery.of(context).size.width,
+                            child: new Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                margin: EdgeInsets.all(5),
+                                elevation: 5,
+                                child: new ClipRRect(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  child: new Image.network(RestDataSource.BASE_URL+item.sliderImg,fit: BoxFit.fill,),
+                                )
+                            ),
+                          ),
+                          new Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                              color: Colors.black26,
+                            ),
+                          ),
+                          new Container(
+                              margin: EdgeInsets.only(left: 5,top: 155,bottom: 5,right: 5),
+                              height: 45,
+                              width: MediaQuery.of(context).size.width/1,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12),bottomRight: Radius.circular(15)),
+                                color: Colors.black26,
+                              ),
+                              child: new Center(
+                                  child: new Text(item.sliderName,
+                                    style: new TextStyle(color: ColorStyle().color_white,fontWeight: FontWeight.bold,fontSize: 17),)
+                              )
+                          ),
+                        ],
+                      )
+                  );
+                }
+                ).toList(),
+              ),
+              /*child: new ListView.builder(
                   itemCount: slider_listSize,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context,index){
@@ -384,11 +455,12 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                         )
                       ],
                     );
-                  }),
+                  }),*/
             ),
+
             new Container(
-                height: 300,
-                padding: EdgeInsets.only(bottom: 30),
+                height: 270,
+                padding: EdgeInsets.only(bottom: 5),
                 child: GridView.count(
                   physics: NeverScrollableScrollPhysics(),
                   crossAxisCount: 3 ,
@@ -409,10 +481,10 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                             child: new Stack(
                               children: <Widget>[
                                 new Container(
-                                  height: 180,
+                                  height: 200,
                                     decoration: new BoxDecoration(
                                         color: Colors.black54,
-                                        borderRadius: BorderRadius.all(Radius.circular(12))
+                                        borderRadius: BorderRadius.all(Radius.circular(8))
                                     ),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.all(Radius.circular(7)),
@@ -425,35 +497,61 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                                   width: MediaQuery.of(context).size.width,
                                   decoration: new BoxDecoration(
                                       color: Colors.black38,
-                                      borderRadius: BorderRadius.all(Radius.circular(12))
+                                      borderRadius: BorderRadius.all(Radius.circular(8))
                                   ),
                                   child: new Column(
                                     children: <Widget>[
-                                      new Row(
-                                        children: <Widget>[
-                                          new Container(
-
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(6)),
-                                              color: Colors.green,
+                                      new Expanded(
+                                        flex: 2,
+                                        child: new Row(
+                                          children: <Widget>[
+                                            new Container(
+                                              decoration: BoxDecoration(
+                                                  // color: Color(0xffa8d7ec),
+                                                  color: Colors.black26
+                                              ),
+                                              padding: EdgeInsets.only(left: 4,top: 3,bottom: 3,right: 12),
+                                              child: new Text(category_List[index].categoryType,
+                                                style: new TextStyle(fontSize: 10,color: ColorStyle().color_white,fontWeight: FontWeight.bold),),
                                             ),
-                                            padding: EdgeInsets.all(4),
-                                            child: new Text(category_List[index].categoryType,
-                                              style: new TextStyle(fontSize: 13,color: ColorStyle().color_white,fontWeight: FontWeight.bold),),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                      new Padding(padding: EdgeInsets.only(top: 70)),
-                                      new Container(
-                                        padding: EdgeInsets.only(left: 4),
-                                        child: new Text(category_List[index].categoryName,
-                                          style: new TextStyle(fontSize: 15,color: ColorStyle().color_white,fontWeight: FontWeight.bold),),
+                                      // new Padding(padding: EdgeInsets.only(top: 60)),
+                                      new Expanded(
+                                          flex: 4,
+                                          child: new Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              new Container(
+                                                height: 45,
+                                                width: 45,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.all(Radius.circular(50)),
+                                                  color: Colors.black26
+                                                ),
+                                                padding: EdgeInsets.only(left: 4),
+                                                child: new Center(
+                                                  child: new Text(category_List[index].categoryCost+'/'+category_List[index].categoryDuration,
+                                                    style: new TextStyle(fontSize: 9,color: ColorStyle().color_white,fontWeight: FontWeight.bold),),
+                                                )
+                                              )
+                                            ],
+                                          )
                                       ),
-                                      new Container(
-                                        padding: EdgeInsets.only(left: 4),
-                                        child: new Text(category_List[index].categoryCost+' / '+category_List[index].categoryDuration,
-                                          style: new TextStyle(fontSize: 13,color: ColorStyle().color_white,fontWeight: FontWeight.bold),),
-                                      )
+                                      new Expanded(
+                                        flex: 2,
+                                          child: new Container(
+                                            color: Colors.black26,
+                                            padding: EdgeInsets.only(left: 4),
+                                            child: new Center(
+                                              child: new Text(category_List[index].categoryName,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: new TextStyle(fontSize: 11,color: ColorStyle().color_white,fontWeight: FontWeight.bold),),
+                                            )
+                                          ),),
+
                                     ],
                                   ),
                                 )
@@ -464,8 +562,100 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                     );
                   }),
                 ),
-            )
+            ),
 
+            new Container(
+              height: 200,
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  autoPlay: false,
+                  aspectRatio: 2.0,
+                  enlargeCenterPage: true,
+                  pageSnapping: true,
+                  viewportFraction: 1.0,
+                ),
+                items: slider_List.map((item){
+                  return Container(
+                      child: new Stack(
+                        children: <Widget>[
+                          new Container(
+                            height: 200,
+                            width: MediaQuery.of(context).size.width,
+                            child: new Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
+                                ),
+                                margin: EdgeInsets.only(left: 5,right:5,top: 5),
+                                elevation: 5,
+                                child: new ClipRRect(
+                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
+                                  child: new Image.network(RestDataSource.BASE_URL+item.sliderImg,fit: BoxFit.fill,),
+                                )
+                            ),
+                          ),
+                          new Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(left: 5,right:5,top: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
+                              color: Colors.black26,
+                            ),
+                            child:  new Container(
+                              height: 50,
+                              margin: EdgeInsets.only(top: 145),
+                              child: new Card(
+                                  child: new Row(
+                                    children: <Widget>[
+                                      new Expanded(
+                                        flex: 6,
+                                        child: new Container(
+                                            height: 45,
+                                            padding: EdgeInsets.only(top: 10,left: 10),
+                                            width: MediaQuery.of(context).size.width/1,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12),bottomRight: Radius.circular(15)),
+                                            ),
+                                            child: new Text('Express Waxing',
+                                              style: new TextStyle(color: ColorStyle().color_black,fontWeight: FontWeight.bold,fontSize: 17),)
+                                        ),
+                                      ),
+                                      new Expanded(
+                                          flex: 3,
+                                          child:new Row(
+                                            children: <Widget>[
+                                              new Container(
+                                                  height: 45,
+                                                  padding: EdgeInsets.only(top: 10,left: 10),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12),bottomRight: Radius.circular(15)),
+                                                  ),
+                                                  child: new Text('₹ 824/-',
+                                                    style: new TextStyle(color: Colors.pink,fontWeight: FontWeight.bold,fontSize: 17),)
+                                              ),
+                                              new Container(
+                                                  height: 45,
+                                                  padding: EdgeInsets.only(top: 13,left: 3),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12),bottomRight: Radius.circular(15)),
+                                                  ),
+                                                  child: new Text('(65 min)',
+                                                    style: new TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 12),)
+                                              ),
+                                            ],
+                                          )
+                                      )
+                                    ],
+                                  )
+                              ),
+                            )
+                          ),
+                        ],
+                      )
+                  );
+                }
+                ).toList(),
+              ),
+            ),
           ],
         )
     );

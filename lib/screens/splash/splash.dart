@@ -12,7 +12,7 @@ import 'package:intro_slider/intro_slider.dart';
 import 'package:intro_slider/slide_object.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-String loginstatus;
+bool loginstatus =false;
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -26,6 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    sharepref();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
      statusBarIconBrightness: Brightness.light
@@ -53,17 +54,17 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
-
   sharepref() async {
-    final prefs = await SharedPreferences.getInstance();
-    loginstatus= prefs.getString('login_status');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      loginstatus= prefs.getBool('login_status');
+    });
   }
 
+
   void onDonePress() async{
-    sharepref();
-    if(loginstatus=='true'){
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (BuildContext context) => HomeScreen()));
+    if(loginstatus==true){
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
     }else{
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (__)=>LoginPage()));
     }
