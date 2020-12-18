@@ -322,7 +322,7 @@ class SignUpPageState extends State<SignUpPage> implements SignUpScreenContract 
                         Navigator.of(context).pop();
                       },
                       child:  new Container(
-                        child: Icon(Icons.arrow_back,color: ColorStyle().color_royal_blue,),
+                        child: Icon(Icons.arrow_back,color: ColorStyle().color_red,),
                       ),
                     ),
                   ],

@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:beinglearners/common/colors.dart';
 import 'package:beinglearners/common/constant.dart';
 import 'package:beinglearners/common/shared_preferences.dart';
 import 'package:beinglearners/model/login.dart';
+import 'package:beinglearners/network_connection/network_connection.dart';
 import 'package:beinglearners/screens/home_screen/home_screen.dart';
 import 'package:beinglearners/screens/login_screen/login_screen_presenter.dart';
 import 'package:beinglearners/screens/signup_screen/signup_screen.dart';
@@ -120,23 +122,16 @@ class _LoginPageState extends State<LoginPage> implements LoginScreenContract {
     if(LoginValidation()){
       _onLoading(true);
       call_api();
-      _presenter.getSignIn(json.encode(_query).toString());
-     /* NetworkConnection.check().then((intenet) {
-        if (intenet != null && intenet) {
-          // page_Status ='Hotel Review';
-          if (_loginId != null && _loginPassword != null && _loginId.trim().length > 0 && _loginPassword.trim().length > 0) {
-            _onLoading(true);
-            _presenter.getSignIn(_loginId, _loginPassword);
-          }  else {
-            _showDialog(context,Translations.of(context).text('please_enter_valid_email_and_password'));
 
-          }
+      NetworkConnection.check().then((intenet) {
+        if (intenet != null && intenet) {
+          _presenter.getSignIn(json.encode(_query).toString());
         }else {
           Navigator.of(context).push(PageTransition(type: PageTransitionType.custom,child: InternetConnection(),
               duration: Duration(milliseconds: 0)));
         }
 
-      });*/
+      });
     }
   }
   void _onLoading(bool status) {
@@ -161,11 +156,11 @@ class _LoginPageState extends State<LoginPage> implements LoginScreenContract {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               new Container(
-                                  padding: EdgeInsets.only(top: 0),
+                                  padding: EdgeInsets.only(top: 20),
                                   width:200,
                                   child: new Center(
                                     child: new Text('Please wait loading...',
-                                      style: new TextStyle(color: new ColorStyle().color_royal_blue,fontSize: 17,fontWeight: FontWeight.bold),),
+                                      style: new TextStyle(color: new ColorStyle().color_red,fontSize: 17,fontWeight: FontWeight.bold),),
                                   )
                               )
                             ],
@@ -265,182 +260,205 @@ class _LoginPageState extends State<LoginPage> implements LoginScreenContract {
         HomeScreen()), (Route<dynamic> route) => false);
 
     }
+
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Are you sure?'),
+        content: new Text('Do you want to exit an App'),
+        actions: <Widget>[
+          new FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: new Text('No'),
+          ),
+          new FlatButton(
+            onPressed: () {
+              exit(0);
+            },
+            child: new Text('Yes'),
+          ),
+        ],
+      ),
+    )) ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: _onWillPop,
+        child:Scaffold(
 
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          child: ListView(
-            physics: BouncingScrollPhysics(),
-            shrinkWrap: true,
+          body: Container(
+            height: MediaQuery.of(context).size.height,
+            child: new Center(
+              child: ListView(
+                physics: BouncingScrollPhysics(),
+                shrinkWrap: true,
 
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(left: 30,right: 30,top: 30),
-                child: new Image.asset('images/logo.jpeg',height: 80,width: 80,),
-              ),
-             new Padding(padding: EdgeInsets.only(top: 20)),
-             new Row(
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: <Widget>[
-                 new Container(
-                   child: Text("Sign to Continue",style: TextStyle(color: ColorStyle().color_red,
-                       fontWeight: FontWeight.bold,fontSize: 18),),
-                 ),
-               ],
-             ),
-              new Container(
-                child: new Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: new EdgeInsets.only(top: 0,left: 40),
-                      child: new Row(
-                        children: <Widget>[
-                          new Container(
-                            child: Text(_emailError==null?"":_emailError,style: TextStyle(color: Colors.red),),
-                          ),
-                        ],
-                      ),
-                    ),
+                children: <Widget>[
 
-                    new Padding(padding: EdgeInsets.only(top: 10.0,left: 20,right: 20)),
-                    new Container(
-                      margin: EdgeInsets.only(left: 30,right: 30),
-
-                      child:  new TextFormField(
-                        cursorColor: new ColorStyle().color_dark_gray,
-                        onChanged: (val)=> _loginId = val,
-                        style: new TextStyle(
-                          fontSize: 16.0,
-                          height: 1.0,
-                          color: ColorStyle().color_dark_gray,
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                        // obscureText: true,
-                        decoration: new InputDecoration(
-                          labelText: "Email" ,
-                          //  errorText: _emailError,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          // border: UnderlineInputBorder(borderRadius: null),
-                          contentPadding: const EdgeInsets.fromLTRB(15, 15, 15, 10),
-                          prefixIcon: Padding(
-                            padding: const EdgeInsetsDirectional.only(start: 8.0,end: 5,bottom: 10,top: 5),
-                           // child: new Image.asset('images/profile_small.png',width: 10,height: 10,color: new ColorStyle().color_black,),
-                            // child: new Image.asset('images/profile.png',color: AppStyle().color_gray,height: 5,), // myIcon is a 48px-wide widget.
-
-                            child: Icon(Icons.mail_outline,color: ColorStyle().color_red,),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: new EdgeInsets.only(top: _passwordError==null?0:20,left: 40),
-                      child: new Row(
-                        children: <Widget>[
-                          new Container(
-                            child: Text(_passwordError==null?"":_passwordError,style: TextStyle(color: Colors.red),),
-                          ),
-                        ],
-                      ),
-                    ),
-                    new Padding(padding: EdgeInsets.only(top: 10.0,left: 20,right: 20)),
-                    new Container(
-                      margin: EdgeInsets.only(left: 30,right: 30),
-
-                      child:  new TextFormField(
-                        cursorColor: new ColorStyle().color_dark_gray,
-                        onChanged: (val)=> _loginPassword = val,
-                        style: new TextStyle(
-                          fontSize: 16.0,
-                          height: 1.0,
-                          color: ColorStyle().color_dark_gray,
-                        ),
-                        keyboardType: TextInputType.text,
-
-                        obscureText: password_obscureText,
-                        decoration: new InputDecoration(
-                          //   errorText: _passwordError,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          labelText:"Password" ,
-                          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
-                          suffixIcon:Padding(
-                              padding: const EdgeInsets.only(right: 13,left: 13),
-                              child: new InkWell(
-                                splashColor: ColorStyle().color_white,
-                                onTap: (){
-                                  password_toggle();
-                                },
-                                child: new Container(
-                                  width: 1,
-                                  height: 5,
-                                  child: Image.asset(password_obscureText?"images/hide_eye.png":"images/eye.png",height: 5,width: 1,color: ColorStyle().color_red,),
-                                ),
-                              )
-                          ),
-                          prefixIcon: Padding(
-                            padding: const EdgeInsetsDirectional.only(start: 8.0,end: 10,bottom: 10,top: 10),
-                            //child: new Image.asset('images/lock.png',width: 8,height: 8,color: new ColorStyle().color_black,),
-                            child: Icon(Icons.lock_outline,color:ColorStyle().color_red,),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: new EdgeInsets.only(top: 10,right: 40),
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Text("Forgot Password",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15,color: ColorStyle().color_red),)
-                  ],
-                ),
-              ),
-              Padding(
-                padding: new EdgeInsets.only(left: 30,right: 30,top: 40),
-                child: new InkWell(
-                  onTap: (){
-                    _onLogin();
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(7)),
-                      color: ColorStyle().color_red,
-                    ),
-                    height: 45,
-                    child: Center(
-                      child: Text("Sign In",
-                        style: TextStyle(
-                            color: ColorStyle().color_white,fontSize: 20),),
-                    ),
-                  ),
-                ),
-              ),
-
-              new Padding(
-                  padding: new EdgeInsets.only(left: 30,right: 30,top: 40),
-                child: new InkWell(
-                  onTap: (){
-                    Navigator.of(context).push(PageTransition(type: PageTransitionType.custom,child: SignUpPage(),
-                        duration: Duration(milliseconds: 0)));
-                  },
-                  child: new Row(
+                  new Padding(padding: EdgeInsets.only(top: 30)),
+                  new Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text("Don't have account?",style: TextStyle(color: ColorStyle().light_black,fontSize: 15),),
-                      Text("Create a new account",style: TextStyle(color: ColorStyle().color_red,fontSize: 15),)
+                      new Container(
+                        child: Text("Sign to Continue",style: TextStyle(color: ColorStyle().color_red,
+                            fontWeight: FontWeight.bold,fontSize: 30),),
+                      ),
                     ],
                   ),
-                )
-              ),
-              /*new Padding(
+                  new Container(
+                    child: new Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: new EdgeInsets.only(top: 20,left: 40),
+                          child: new Row(
+                            children: <Widget>[
+                              new Container(
+                                child: Text(_emailError==null?"":_emailError,style: TextStyle(color: Colors.red),),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        new Padding(padding: EdgeInsets.only(top: 10.0,left: 20,right: 20)),
+                        new Container(
+                          margin: EdgeInsets.only(left: 30,right: 30),
+
+                          child:  new TextFormField(
+                            cursorColor: new ColorStyle().color_red,
+                            onChanged: (val)=> _loginId = val,
+                            style: new TextStyle(
+                              fontSize: 16.0,
+                              height: 1.0,
+                              color: ColorStyle().color_black,
+                            ),
+                            keyboardType: TextInputType.emailAddress,
+                            // obscureText: true,
+                            decoration: new InputDecoration(
+                              labelText: "Email" ,
+                              //  errorText: _emailError,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              // border: UnderlineInputBorder(borderRadius: null),
+                              contentPadding: const EdgeInsets.fromLTRB(15, 15, 15, 10),
+                              prefixIcon: Padding(
+                                padding: const EdgeInsetsDirectional.only(start: 8.0,end: 5,bottom: 10,top: 5),
+                                // child: new Image.asset('images/profile_small.png',width: 10,height: 10,color: new ColorStyle().color_black,),
+                                // child: new Image.asset('images/profile.png',color: AppStyle().color_gray,height: 5,), // myIcon is a 48px-wide widget.
+
+                                child: Icon(Icons.mail_outline,color: ColorStyle().color_red,),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: new EdgeInsets.only(top: _passwordError==null?0:20,left: 40),
+                          child: new Row(
+                            children: <Widget>[
+                              new Container(
+                                child: Text(_passwordError==null?"":_passwordError,style: TextStyle(color: Colors.red),),
+                              ),
+                            ],
+                          ),
+                        ),
+                        new Padding(padding: EdgeInsets.only(top: 10.0,left: 20,right: 20)),
+                        new Container(
+                          margin: EdgeInsets.only(left: 30,right: 30),
+
+                          child:  new TextFormField(
+                            cursorColor: new ColorStyle().color_red,
+                            onChanged: (val)=> _loginPassword = val,
+                            style: new TextStyle(
+                              fontSize: 16.0,
+                              height: 1.0,
+                              color: ColorStyle().color_black,
+                            ),
+                            keyboardType: TextInputType.text,
+
+                            obscureText: password_obscureText,
+                            decoration: new InputDecoration(
+                              //   errorText: _passwordError,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              labelText:"Password" ,
+                              contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
+                              suffixIcon:Padding(
+                                  padding: const EdgeInsets.only(right: 13,left: 13),
+                                  child: new InkWell(
+                                    splashColor: ColorStyle().color_white,
+                                    onTap: (){
+                                      password_toggle();
+                                    },
+                                    child: new Container(
+                                      width: 1,
+                                      height: 5,
+                                      child: Image.asset(password_obscureText?"images/hide_eye.png":"images/eye.png",height: 5,width: 1,color: ColorStyle().color_red,),
+                                    ),
+                                  )
+                              ),
+                              prefixIcon: Padding(
+                                padding: const EdgeInsetsDirectional.only(start: 8.0,end: 10,bottom: 10,top: 10),
+                                //child: new Image.asset('images/lock.png',width: 8,height: 8,color: new ColorStyle().color_black,),
+                                child: Icon(Icons.lock_outline,color:ColorStyle().color_red,),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: new EdgeInsets.only(top: 10,right: 40),
+                    child: new Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Text("Forgot Password",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15,color: ColorStyle().color_red),)
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: new EdgeInsets.only(left: 30,right: 30,top: 40),
+                    child: new InkWell(
+                      onTap: (){
+                        _onLogin();
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(7)),
+                          color: ColorStyle().color_red,
+                        ),
+                        height: 45,
+                        child: Center(
+                          child: Text("Sign In",
+                            style: TextStyle(
+                                color: ColorStyle().color_white,fontSize: 20),),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  new Padding(
+                      padding: new EdgeInsets.only(left: 30,right: 30,top: 40),
+                      child: new InkWell(
+                        onTap: (){
+                          Navigator.of(context).push(PageTransition(type: PageTransitionType.custom,child: SignUpPage(),
+                              duration: Duration(milliseconds: 0)));
+                        },
+                        child: new Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("Don't have account?",style: TextStyle(color: ColorStyle().light_black,fontSize: 15),),
+                            Text("Create a new account",style: TextStyle(color: ColorStyle().color_red,fontSize: 15),)
+                          ],
+                        ),
+                      )
+                  ),
+                  /*new Padding(
                   padding: new EdgeInsets.only(left: 30,right: 30,top: 40),
                   child: new InkWell(
                     onTap: (){
@@ -455,11 +473,12 @@ class _LoginPageState extends State<LoginPage> implements LoginScreenContract {
                     ),
                   )
               )*/
-              
-            ],
+
+                ],
+              ),
+            )
           ),
-        ),
-    );
+        ));
   }
 
   @override

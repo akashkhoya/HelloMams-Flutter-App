@@ -135,6 +135,34 @@
             </list>
           </value>
         </entry>
+        <entry key="connectivity">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity-0.4.9+5/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="connectivity_for_web">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_for_web-0.3.1+4/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="connectivity_macos">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_macos-0.1.0+7/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="connectivity_platform_interface">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_platform_interface-1.0.6/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="convert">
           <value>
             <list>
@@ -429,6 +457,13 @@
             </list>
           </value>
         </entry>
+        <entry key="plugin_platform_interface">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-1.0.3/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="pool">
           <value>
             <list>
@@ -647,6 +682,10 @@
       <root url="file://$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/clippy_flutter-1.1.0/lib" />
       <root url="file://$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/code_builder-3.2.1/lib" />
       <root url="file://$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.14.12/lib" />
+      <root url="file://$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity-0.4.9+5/lib" />
+      <root url="file://$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_for_web-0.3.1+4/lib" />
+      <root url="file://$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_macos-0.1.0+7/lib" />
+      <root url="file://$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_platform_interface-1.0.6/lib" />
       <root url="file://$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/convert-2.1.1/lib" />
       <root url="file://$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-2.1.4/lib" />
       <root url="file://$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/csslib-0.16.1/lib" />
@@ -686,6 +725,7 @@
       <root url="file://$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.6.4/lib" />
       <root url="file://$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/pedantic-1.8.0+1/lib" />
       <root url="file://$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/petitparser-2.4.0/lib" />
+      <root url="file://$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-1.0.3/lib" />
       <root url="file://$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/pool-1.4.0/lib" />
       <root url="file://$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/pub_semver-1.4.3/lib" />
       <root url="file://$PROJECT_DIR$/../../Android/flutter/.pub-cache/hosted/pub.dartlang.org/pubspec_parse-0.1.5/lib" />

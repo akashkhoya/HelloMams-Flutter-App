@@ -85,6 +85,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
             color: ColorStyle().color_white,
             child: Column(
               children: <Widget>[
+                new Padding(padding: EdgeInsets.only(top: 20)),
                 new Container(
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.only(top: 25),
@@ -176,12 +177,14 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
             content:  new Container(
                 child: new Center(
                     child: new Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         new Row(
                           mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             new Container(
-                                padding: EdgeInsets.only(top: 0,bottom: 10),
+                                padding: EdgeInsets.only(top: 16,bottom: 20),
                                 width:200,
                                 child: new Center(
                                   child: new Text(mesg,
@@ -191,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                             )
                           ],
                         ),
-                        new Padding(padding: EdgeInsets.only(top: 10)),
+                        new Padding(padding: EdgeInsets.only(top: 5)),
                         new Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -216,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                                     ),
 
                                     child: Center(
-                                      child: Text("OK",style: TextStyle(color: ColorStyle().color_white),),
+                                      child: Text("YES",style: TextStyle(color: ColorStyle().color_white,fontSize: 12),),
                                     ),
                                   ),
                                 ),
@@ -240,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                                       ),
 
                                       child: Center(
-                                        child: Text("Cancel",style: TextStyle(color: ColorStyle().color_white),),
+                                        child: Text("NO",style: TextStyle(color: ColorStyle().color_white,fontSize: 12),),
                                       ),
                                     ),
                                   ),
@@ -397,7 +400,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                             margin: EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(12)),
-                              color: Colors.black26,
+                              color: Colors.black12,
                             ),
                           ),
                           new Container(
@@ -406,7 +409,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                               width: MediaQuery.of(context).size.width/1,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12),bottomRight: Radius.circular(15)),
-                                color: Colors.black26,
+                                color: Colors.black12,
                               ),
                               child: new Center(
                                   child: new Text(item.sliderName,
@@ -483,7 +486,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                                 new Container(
                                   height: 200,
                                     decoration: new BoxDecoration(
-                                        color: Colors.black54,
+                                        color: Colors.black12,
                                         borderRadius: BorderRadius.all(Radius.circular(8))
                                     ),
                                     child: ClipRRect(
@@ -496,7 +499,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                                 new Container(
                                   width: MediaQuery.of(context).size.width,
                                   decoration: new BoxDecoration(
-                                      color: Colors.black38,
+                                      color: Colors.black12,
                                       borderRadius: BorderRadius.all(Radius.circular(8))
                                   ),
                                   child: new Column(
@@ -512,7 +515,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                                               ),
                                               padding: EdgeInsets.only(left: 4,top: 3,bottom: 3,right: 12),
                                               child: new Text(category_List[index].categoryType,
-                                                style: new TextStyle(fontSize: 10,color: ColorStyle().color_white,fontWeight: FontWeight.bold),),
+                                                style: new TextStyle(fontSize: 10,color: Colors.green[200],fontWeight: FontWeight.bold),),
                                             ),
                                           ],
                                         ),
@@ -533,7 +536,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                                                 padding: EdgeInsets.only(left: 4),
                                                 child: new Center(
                                                   child: new Text(category_List[index].categoryCost+'/'+category_List[index].categoryDuration,
-                                                    style: new TextStyle(fontSize: 9,color: ColorStyle().color_white,fontWeight: FontWeight.bold),),
+                                                    style: new TextStyle(fontSize: 9,color: ColorStyle().color_white,),),
                                                 )
                                               )
                                             ],
@@ -542,13 +545,13 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                                       new Expanded(
                                         flex: 2,
                                           child: new Container(
-                                            color: Colors.black26,
+                                            color: Colors.black12,
                                             padding: EdgeInsets.only(left: 4),
                                             child: new Center(
                                               child: new Text(category_List[index].categoryName,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: new TextStyle(fontSize: 11,color: ColorStyle().color_white,fontWeight: FontWeight.bold),),
+                                                style: new TextStyle(fontSize: 11,color: Colors.red[400],fontWeight: FontWeight.bold),),
                                             )
                                           ),),
 
@@ -563,99 +566,345 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                   }),
                 ),
             ),
-
             new Container(
-              height: 200,
-              child: CarouselSlider(
-                options: CarouselOptions(
-                  autoPlay: false,
-                  aspectRatio: 2.0,
-                  enlargeCenterPage: true,
-                  pageSnapping: true,
-                  viewportFraction: 1.0,
-                ),
-                items: slider_List.map((item){
-                  return Container(
-                      child: new Stack(
-                        children: <Widget>[
-                          new Container(
-                            height: 200,
-                            width: MediaQuery.of(context).size.width,
-                            child: new Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
-                                ),
-                                margin: EdgeInsets.only(left: 5,right:5,top: 5),
-                                elevation: 5,
-                                child: new ClipRRect(
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
-                                  child: new Image.network(RestDataSource.BASE_URL+item.sliderImg,fit: BoxFit.fill,),
-                                )
-                            ),
-                          ),
-                          new Container(
-                            width: MediaQuery.of(context).size.width,
-                            margin: EdgeInsets.only(left: 5,right:5,top: 5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
-                              color: Colors.black26,
-                            ),
-                            child:  new Container(
-                              height: 50,
-                              margin: EdgeInsets.only(top: 145),
+              margin: EdgeInsets.only(bottom: 5,left: 5,right: 5),
+              height: 100,
+              width: MediaQuery.of(context).size.width,
+              child: new Image.asset('images/offer_img.jpeg',fit: BoxFit.fill,),
+            ),
+             new Expanded(
+                 child: new Container(
+                   height: 170,
+                   child: new ListView.builder(
+                       itemCount: slider_listSize,
+                       scrollDirection: Axis.horizontal,
+                       itemBuilder: (context,index){
+                         return  new Stack(
+                           children: <Widget>[
+                             new Container(
+                               height: 170,
+                               width: MediaQuery.of(context).size.width/1.8,
+                               child: new Card(
+                                   shape: RoundedRectangleBorder(
+                                     borderRadius: BorderRadius.circular(13.0),
+                                   ),
+                                   margin: EdgeInsets.all(10),
+                                   elevation: 5,
+                                   child: new ClipRRect(
+                                     borderRadius: BorderRadius.circular(13.0),
+                                     child: new Image.network(RestDataSource.BASE_URL+slider_List[index].sliderImg,fit: BoxFit.fill,),
+                                   )
+                               ),
+                             ),
+                             new Container(
+                               width: MediaQuery.of(context).size.width/1.98,
+                               margin: EdgeInsets.all(10),
+                               decoration: BoxDecoration(
+                                 borderRadius: BorderRadius.all(Radius.circular(13)),
+                                 color: Colors.black12,
+                               ),
+
+                               child: new Column(
+                                 children: <Widget>[
+                                   new Expanded(
+                                       flex: 6,
+                                       child: new Container()),
+                                   new Expanded(
+                                     flex: 2,
+                                       child: new Container(
+                                         decoration: BoxDecoration(
+                                           borderRadius: BorderRadius.only(bottomLeft: Radius.circular(13),bottomRight: Radius.circular(13)),
+                                           color: Colors.black12,
+                                         ),
+                                         child: new Row(
+                                           children: <Widget>[
+                                             new Expanded(
+                                                 flex: 5,
+                                                 child: new Container(
+                                                   child: new Center(
+                                                     child: new Text('Body Massage',
+                                                     style: new TextStyle(color: ColorStyle().color_white,fontSize: 12),),
+                                                   ),
+                                                 )),
+                                             new Expanded(
+                                               flex: 3,
+                                                 child: new Container(
+                                                   margin: EdgeInsets.only(right: 10),
+                                                   height: 23,
+                                                   decoration: BoxDecoration(
+                                                     borderRadius: BorderRadius.all( Radius.circular(4)),
+                                                     color: ColorStyle().color_red,
+                                                   ),
+                                                   child: new Center(
+                                                     child: new Text('Know more',
+                                                     style: new TextStyle(color: ColorStyle().color_white,fontSize: 10),),
+                                                   ),
+                                                 ))
+                                           ],
+                                         ),
+                                       ))
+                                 ],
+                               )
+                             )
+                           ],
+                         );
+                       }),
+                 )),
+            new Container(
+              padding: EdgeInsets.only(left: 12,top: 10,bottom: 8),
+              child: new Text('Male Services',
+              style: new TextStyle(color: ColorStyle().color_black,fontSize: 15,fontWeight: FontWeight.bold),),
+            ),
+            new Expanded(
+                child: new Container(
+                  height: 130,
+                  child: new ListView.builder(
+                      itemCount: slider_listSize,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context,index){
+                        return  new Stack(
+                          children: <Widget>[
+                            new Container(
+                              height: 130,
+                              width: MediaQuery.of(context).size.width/3,
                               child: new Card(
-                                  child: new Row(
-                                    children: <Widget>[
-                                      new Expanded(
-                                        flex: 6,
-                                        child: new Container(
-                                            height: 45,
-                                            padding: EdgeInsets.only(top: 10,left: 10),
-                                            width: MediaQuery.of(context).size.width/1,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12),bottomRight: Radius.circular(15)),
-                                            ),
-                                            child: new Text('Express Waxing',
-                                              style: new TextStyle(color: ColorStyle().color_black,fontWeight: FontWeight.bold,fontSize: 17),)
-                                        ),
-                                      ),
-                                      new Expanded(
-                                          flex: 3,
-                                          child:new Row(
-                                            children: <Widget>[
-                                              new Container(
-                                                  height: 45,
-                                                  padding: EdgeInsets.only(top: 10,left: 10),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12),bottomRight: Radius.circular(15)),
-                                                  ),
-                                                  child: new Text('₹ 824/-',
-                                                    style: new TextStyle(color: Colors.pink,fontWeight: FontWeight.bold,fontSize: 17),)
-                                              ),
-                                              new Container(
-                                                  height: 45,
-                                                  padding: EdgeInsets.only(top: 13,left: 3),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12),bottomRight: Radius.circular(15)),
-                                                  ),
-                                                  child: new Text('(65 min)',
-                                                    style: new TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 12),)
-                                              ),
-                                            ],
-                                          )
-                                      )
-                                    ],
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  // margin: EdgeInsets.all(10),
+                                  elevation: 5,
+                                  child: new ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: new Image.network(RestDataSource.BASE_URL+slider_List[index].sliderImg,fit: BoxFit.fill,),
                                   )
                               ),
+                            ),
+                            new Container(
+                                width: MediaQuery.of(context).size.width/3.15,
+                                margin: EdgeInsets.all(1),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  // color: Colors.black54,
+                                ),
+
+                                child: new Column(
+                                  children: <Widget>[
+                                    new Expanded(
+                                        flex: 2,
+                                        child: new Container()),
+                                    new Expanded(
+                                        flex: 2,
+                                        child: new Container(
+                                          margin: EdgeInsets.only(bottom: 2),
+                                          width: MediaQuery.of(context).size.width,
+                                          decoration: BoxDecoration(
+                                           image: DecorationImage(
+                                             image: AssetImage('images/men_service.png')
+                                           )
+                                          ),
+                                          child: new Column(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: <Widget>[
+                                              new Row(
+                                                children: <Widget>[
+                                                  new Expanded(
+                                                      flex: 3,
+                                                      child: new Container(
+                                                      )),
+                                                  new Expanded(
+                                                      flex: 5,
+                                                      child:new Column(
+                                                        children: <Widget>[
+                                                          new Container(
+                                                            child: new Center(
+                                                              child: new Text('Body Massage',
+                                                                style: new TextStyle(color: ColorStyle().color_white,fontSize: 9),),
+                                                            ),
+                                                          ),
+                                                          new Container(
+                                                            margin: EdgeInsets.only(top: 4,right: 3),
+                                                            height: 1,
+                                                            width: MediaQuery.of(context).size.width/4,
+                                                            color: ColorStyle().color_white,
+                                                          )
+                                                        ],
+                                                      ))
+                                                ],
+                                              ),
+                                              new Padding(padding: EdgeInsets.only(bottom: 12)),
+                                              new Row(
+                                                children: <Widget>[
+                                                  new Expanded(
+                                                      flex: 4,
+                                                      child: new Container(
+                                                        margin: EdgeInsets.only(left: 5),
+                                                        height: 16,
+                                                        decoration: BoxDecoration(
+                                                          borderRadius: BorderRadius.all( Radius.circular(4)),
+                                                          color: Colors.black26,
+                                                        ),
+                                                        child: new Center(
+                                                          child: new Text('5/min',
+                                                            style: new TextStyle(color: ColorStyle().color_white,fontSize: 8),),
+                                                        ),
+                                                      )),
+                                                  new Expanded(
+                                                      flex: 1,
+                                                      child: new Container()),
+                                                  new Expanded(
+                                                      flex: 4,
+                                                      child: new Container(
+                                                        margin: EdgeInsets.only(right: 5),
+                                                        height: 16,
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.deepPurple[300],
+                                                        ),
+                                                        child: new Center(
+                                                          child: new Text('Know more',
+                                                            style: new TextStyle(color: ColorStyle().color_white,fontSize: 8),),
+                                                        ),
+                                                      ))
+                                                ],
+                                              ),
+                                              new Padding(padding: EdgeInsets.only(bottom: 4)),
+                                            ],
+                                          )
+                                        ))
+                                  ],
+                                )
                             )
-                          ),
-                        ],
-                      )
-                  );
-                }
-                ).toList(),
-              ),
+                          ],
+                        );
+                      }),
+                )),
+
+            new Container(
+              padding: EdgeInsets.only(left: 12,top: 10,bottom: 8),
+              child: new Text('Female Services',
+                style: new TextStyle(color: ColorStyle().color_black,fontSize: 15,fontWeight: FontWeight.bold),),
             ),
+            new Expanded(
+                child: new Container(
+                  height: 130,
+                  child: new ListView.builder(
+                      itemCount: slider_listSize,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context,index){
+                        return  new Stack(
+                          children: <Widget>[
+                            new Container(
+                              height: 130,
+                              width: MediaQuery.of(context).size.width/3,
+                              child: new Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  // margin: EdgeInsets.all(10),
+                                  elevation: 5,
+                                  child: new ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: new Image.network(RestDataSource.BASE_URL+slider_List[index].sliderImg,fit: BoxFit.fill,),
+                                  )
+                              ),
+                            ),
+                            new Container(
+                                width: MediaQuery.of(context).size.width/3.15,
+                                margin: EdgeInsets.all(1),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  // color: Colors.black54,
+                                ),
+
+                                child: new Column(
+                                  children: <Widget>[
+                                    new Expanded(
+                                        flex: 2,
+                                        child: new Container()),
+                                    new Expanded(
+                                        flex: 2,
+                                        child: new Container(
+                                            margin: EdgeInsets.only(bottom: 2),
+                                            width: MediaQuery.of(context).size.width,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: AssetImage('images/women_service.png')
+                                                )
+                                            ),
+                                            child: new Column(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: <Widget>[
+                                                new Row(
+                                                  children: <Widget>[
+                                                    new Expanded(
+                                                        flex: 3,
+                                                        child: new Container(
+                                                        )),
+                                                    new Expanded(
+                                                        flex: 5,
+                                                        child:new Column(
+                                                          children: <Widget>[
+                                                            new Container(
+                                                              child: new Center(
+                                                                child: new Text('Body Massage',
+                                                                  style: new TextStyle(color: ColorStyle().color_white,fontSize: 9),),
+                                                              ),
+                                                            ),
+                                                            new Container(
+                                                              margin: EdgeInsets.only(top: 4,right: 3),
+                                                              height: 1,
+                                                              width: MediaQuery.of(context).size.width/4,
+                                                              color: ColorStyle().color_white,
+                                                            )
+                                                          ],
+                                                        ))
+                                                  ],
+                                                ),
+                                                new Padding(padding: EdgeInsets.only(bottom: 12)),
+                                                new Row(
+                                                  children: <Widget>[
+                                                    new Expanded(
+                                                        flex: 4,
+                                                        child: new Container(
+                                                          margin: EdgeInsets.only(left: 5),
+                                                          height: 16,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.all( Radius.circular(4)),
+                                                            color: Colors.black26,
+                                                          ),
+                                                          child: new Center(
+                                                            child: new Text('5/min',
+                                                              style: new TextStyle(color: ColorStyle().color_white,fontSize: 8),),
+                                                          ),
+                                                        )),
+                                                    new Expanded(
+                                                        flex: 1,
+                                                        child: new Container()),
+                                                    new Expanded(
+                                                        flex: 4,
+                                                        child: new Container(
+                                                          margin: EdgeInsets.only(right: 5),
+                                                          height: 16,
+                                                          decoration: BoxDecoration(
+                                                            color: Colors.red[200],
+                                                          ),
+                                                          child: new Center(
+                                                            child: new Text('Know more',
+                                                              style: new TextStyle(color: ColorStyle().color_white,fontSize: 8),),
+                                                          ),
+                                                        ))
+                                                  ],
+                                                ),
+                                                new Padding(padding: EdgeInsets.only(bottom: 4)),
+                                              ],
+                                            )
+                                        ))
+                                  ],
+                                )
+                            )
+                          ],
+                        );
+                      }),
+                ))
           ],
         )
     );

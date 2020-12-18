@@ -1,7 +1,7 @@
 # compiler: R8
 # compiler_version: 1.5.64
 # min_api: 19
-# pg_map_id: 896be61
+# pg_map_id: 0b269c3
 androidx.activity.Cancellable -> androidx.activity.a:
 androidx.activity.ComponentActivity -> androidx.activity.b:
     androidx.lifecycle.ViewModelStore getViewModelStore() -> b
@@ -881,6 +881,7 @@ io.flutter.embedding.engine.dart.DartExecutor -> io.flutter.embedding.engine.e.a
     java.lang.String access$002(io.flutter.embedding.engine.dart.DartExecutor,java.lang.String) -> a
     void executeDartEntrypoint(io.flutter.embedding.engine.dart.DartExecutor$DartEntrypoint) -> a
     java.lang.String getIsolateServiceId() -> a
+    void send(java.lang.String,java.nio.ByteBuffer) -> a
     void send(java.lang.String,java.nio.ByteBuffer,io.flutter.plugin.common.BinaryMessenger$BinaryReply) -> a
     void setMessageHandler(java.lang.String,io.flutter.plugin.common.BinaryMessenger$BinaryMessageHandler) -> a
     io.flutter.embedding.engine.dart.DartExecutor$IsolateServiceIdListener access$100(io.flutter.embedding.engine.dart.DartExecutor) -> b
@@ -895,6 +896,7 @@ io.flutter.embedding.engine.dart.DartExecutor$DartEntrypoint -> io.flutter.embed
     java.lang.String dartEntrypointFunctionName -> b
 io.flutter.embedding.engine.dart.DartExecutor$DefaultBinaryMessenger -> io.flutter.embedding.engine.e.a$c:
     io.flutter.embedding.engine.dart.DartMessenger messenger -> a
+    void send(java.lang.String,java.nio.ByteBuffer) -> a
     void send(java.lang.String,java.nio.ByteBuffer,io.flutter.plugin.common.BinaryMessenger$BinaryReply) -> a
     void setMessageHandler(java.lang.String,io.flutter.plugin.common.BinaryMessenger$BinaryMessageHandler) -> a
 io.flutter.embedding.engine.dart.DartExecutor$IsolateServiceIdListener -> io.flutter.embedding.engine.e.a$d:
@@ -906,6 +908,7 @@ io.flutter.embedding.engine.dart.DartMessenger -> io.flutter.embedding.engine.e.
     int nextReplyId -> d
     void handleMessageFromDart(java.lang.String,byte[],int) -> a
     void handlePlatformMessageResponse(int,byte[]) -> a
+    void send(java.lang.String,java.nio.ByteBuffer) -> a
     void send(java.lang.String,java.nio.ByteBuffer,io.flutter.plugin.common.BinaryMessenger$BinaryReply) -> a
     void setMessageHandler(java.lang.String,io.flutter.plugin.common.BinaryMessenger$BinaryMessageHandler) -> a
 io.flutter.embedding.engine.dart.DartMessenger$Reply -> io.flutter.embedding.engine.e.b$a:
@@ -1408,20 +1411,47 @@ io.flutter.plugin.common.BasicMessageChannel$MessageHandler -> c.a.b.a.a$d:
 io.flutter.plugin.common.BasicMessageChannel$Reply -> c.a.b.a.a$e:
     void reply(java.lang.Object) -> a
 io.flutter.plugin.common.BinaryMessenger -> c.a.b.a.b:
+    void send(java.lang.String,java.nio.ByteBuffer) -> a
     void send(java.lang.String,java.nio.ByteBuffer,io.flutter.plugin.common.BinaryMessenger$BinaryReply) -> a
     void setMessageHandler(java.lang.String,io.flutter.plugin.common.BinaryMessenger$BinaryMessageHandler) -> a
 io.flutter.plugin.common.BinaryMessenger$BinaryMessageHandler -> c.a.b.a.b$a:
     void onMessage(java.nio.ByteBuffer,io.flutter.plugin.common.BinaryMessenger$BinaryReply) -> a
 io.flutter.plugin.common.BinaryMessenger$BinaryReply -> c.a.b.a.b$b:
     void reply(java.nio.ByteBuffer) -> a
-io.flutter.plugin.common.FlutterException -> c.a.b.a.c:
+io.flutter.plugin.common.EventChannel -> c.a.b.a.c:
+    io.flutter.plugin.common.MethodCodec codec -> c
+    io.flutter.plugin.common.BinaryMessenger messenger -> a
+    java.lang.String name -> b
+    io.flutter.plugin.common.MethodCodec access$000(io.flutter.plugin.common.EventChannel) -> a
+    void setStreamHandler(io.flutter.plugin.common.EventChannel$StreamHandler) -> a
+    java.lang.String access$200(io.flutter.plugin.common.EventChannel) -> b
+    io.flutter.plugin.common.BinaryMessenger access$400(io.flutter.plugin.common.EventChannel) -> c
+io.flutter.plugin.common.EventChannel$1 -> c.a.b.a.c$a:
+io.flutter.plugin.common.EventChannel$EventSink -> c.a.b.a.c$b:
+    void success(java.lang.Object) -> a
+io.flutter.plugin.common.EventChannel$IncomingStreamRequestHandler -> c.a.b.a.c$c:
+    io.flutter.plugin.common.EventChannel this$0 -> c
+    java.util.concurrent.atomic.AtomicReference activeSink -> b
+    io.flutter.plugin.common.EventChannel$StreamHandler handler -> a
+    java.util.concurrent.atomic.AtomicReference access$300(io.flutter.plugin.common.EventChannel$IncomingStreamRequestHandler) -> a
+    void onCancel(java.lang.Object,io.flutter.plugin.common.BinaryMessenger$BinaryReply) -> a
+    void onMessage(java.nio.ByteBuffer,io.flutter.plugin.common.BinaryMessenger$BinaryReply) -> a
+    void onListen(java.lang.Object,io.flutter.plugin.common.BinaryMessenger$BinaryReply) -> b
+io.flutter.plugin.common.EventChannel$IncomingStreamRequestHandler$EventSinkImplementation -> c.a.b.a.c$c$a:
+    io.flutter.plugin.common.EventChannel$IncomingStreamRequestHandler this$1 -> b
+    java.util.concurrent.atomic.AtomicBoolean hasEnded -> a
+    void success(java.lang.Object) -> a
+io.flutter.plugin.common.EventChannel$StreamHandler -> c.a.b.a.c$d:
+    void onCancel(java.lang.Object) -> a
+    void onListen(java.lang.Object,io.flutter.plugin.common.EventChannel$EventSink) -> a
+io.flutter.plugin.common.FlutterException -> c.a.b.a.d:
     java.lang.Object details -> b
     java.lang.String code -> a
-io.flutter.plugin.common.JSONMessageCodec -> c.a.b.a.d:
+io.flutter.plugin.common.JSONMessageCodec -> c.a.b.a.e:
     io.flutter.plugin.common.JSONMessageCodec INSTANCE -> a
     java.lang.Object decodeMessage(java.nio.ByteBuffer) -> a
     java.nio.ByteBuffer encodeMessage(java.lang.Object) -> a
-io.flutter.plugin.common.JSONMethodCodec -> c.a.b.a.e:
+io.flutter.plugin.common.JSONMethodCodec -> c.a.b.a.f:
     io.flutter.plugin.common.JSONMethodCodec INSTANCE -> a
     io.flutter.plugin.common.MethodCall decodeMethodCall(java.nio.ByteBuffer) -> a
     java.nio.ByteBuffer encodeErrorEnvelope(java.lang.String,java.lang.String,java.lang.Object) -> a
@@ -1429,17 +1459,17 @@ io.flutter.plugin.common.JSONMethodCodec -> c.a.b.a.e:
     java.nio.ByteBuffer encodeSuccessEnvelope(java.lang.Object) -> a
     java.lang.Object decodeEnvelope(java.nio.ByteBuffer) -> b
     java.lang.Object unwrapNull(java.lang.Object) -> b
-io.flutter.plugin.common.JSONUtil -> c.a.b.a.f:
+io.flutter.plugin.common.JSONUtil -> c.a.b.a.g:
     java.lang.Object wrap(java.lang.Object) -> a
-io.flutter.plugin.common.MessageCodec -> c.a.b.a.g:
+io.flutter.plugin.common.MessageCodec -> c.a.b.a.h:
     java.lang.Object decodeMessage(java.nio.ByteBuffer) -> a
     java.nio.ByteBuffer encodeMessage(java.lang.Object) -> a
-io.flutter.plugin.common.MethodCall -> c.a.b.a.h:
+io.flutter.plugin.common.MethodCall -> c.a.b.a.i:
     java.lang.Object arguments -> b
     java.lang.String method -> a
     java.lang.Object argument(java.lang.String) -> a
     java.lang.Object arguments() -> a
-io.flutter.plugin.common.MethodChannel -> c.a.b.a.i:
+io.flutter.plugin.common.MethodChannel -> c.a.b.a.j:
     io.flutter.plugin.common.MethodCodec codec -> c
     io.flutter.plugin.common.BinaryMessenger messenger -> a
     java.lang.String name -> b
@@ -1448,49 +1478,49 @@ io.flutter.plugin.common.MethodChannel -> c.a.b.a.i:
     void invokeMethod(java.lang.String,java.lang.Object,io.flutter.plugin.common.MethodChannel$Result) -> a
     void setMethodCallHandler(io.flutter.plugin.common.MethodChannel$MethodCallHandler) -> a
     java.lang.String access$100(io.flutter.plugin.common.MethodChannel) -> b
-io.flutter.plugin.common.MethodChannel$IncomingMethodCallHandler -> c.a.b.a.i$a:
+io.flutter.plugin.common.MethodChannel$IncomingMethodCallHandler -> c.a.b.a.j$a:
     io.flutter.plugin.common.MethodChannel$MethodCallHandler handler -> a
     io.flutter.plugin.common.MethodChannel this$0 -> b
     void onMessage(java.nio.ByteBuffer,io.flutter.plugin.common.BinaryMessenger$BinaryReply) -> a
-io.flutter.plugin.common.MethodChannel$IncomingMethodCallHandler$1 -> c.a.b.a.i$a$a:
+io.flutter.plugin.common.MethodChannel$IncomingMethodCallHandler$1 -> c.a.b.a.j$a$a:
     io.flutter.plugin.common.BinaryMessenger$BinaryReply val$reply -> a
     io.flutter.plugin.common.MethodChannel$IncomingMethodCallHandler this$1 -> b
     void error(java.lang.String,java.lang.String,java.lang.Object) -> a
     void notImplemented() -> a
     void success(java.lang.Object) -> a
-io.flutter.plugin.common.MethodChannel$IncomingResultHandler -> c.a.b.a.i$b:
+io.flutter.plugin.common.MethodChannel$IncomingResultHandler -> c.a.b.a.j$b:
     io.flutter.plugin.common.MethodChannel$Result callback -> a
     io.flutter.plugin.common.MethodChannel this$0 -> b
     void reply(java.nio.ByteBuffer) -> a
-io.flutter.plugin.common.MethodChannel$MethodCallHandler -> c.a.b.a.i$c:
+io.flutter.plugin.common.MethodChannel$MethodCallHandler -> c.a.b.a.j$c:
     void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result) -> a
-io.flutter.plugin.common.MethodChannel$Result -> c.a.b.a.i$d:
+io.flutter.plugin.common.MethodChannel$Result -> c.a.b.a.j$d:
     void error(java.lang.String,java.lang.String,java.lang.Object) -> a
     void notImplemented() -> a
     void success(java.lang.Object) -> a
-io.flutter.plugin.common.MethodCodec -> c.a.b.a.j:
+io.flutter.plugin.common.MethodCodec -> c.a.b.a.k:
     io.flutter.plugin.common.MethodCall decodeMethodCall(java.nio.ByteBuffer) -> a
     java.nio.ByteBuffer encodeErrorEnvelope(java.lang.String,java.lang.String,java.lang.Object) -> a
     java.nio.ByteBuffer encodeMethodCall(io.flutter.plugin.common.MethodCall) -> a
     java.nio.ByteBuffer encodeSuccessEnvelope(java.lang.Object) -> a
     java.lang.Object decodeEnvelope(java.nio.ByteBuffer) -> b
-io.flutter.plugin.common.PluginRegistry -> c.a.b.a.k:
-io.flutter.plugin.common.PluginRegistry$ActivityResultListener -> c.a.b.a.k$a:
+io.flutter.plugin.common.PluginRegistry -> c.a.b.a.l:
+io.flutter.plugin.common.PluginRegistry$ActivityResultListener -> c.a.b.a.l$a:
     boolean onActivityResult(int,int,android.content.Intent) -> a
-io.flutter.plugin.common.PluginRegistry$NewIntentListener -> c.a.b.a.k$b:
+io.flutter.plugin.common.PluginRegistry$NewIntentListener -> c.a.b.a.l$b:
     boolean onNewIntent(android.content.Intent) -> a
-io.flutter.plugin.common.PluginRegistry$Registrar -> c.a.b.a.k$c:
+io.flutter.plugin.common.PluginRegistry$Registrar -> c.a.b.a.l$c:
     io.flutter.plugin.common.PluginRegistry$Registrar addActivityResultListener(io.flutter.plugin.common.PluginRegistry$ActivityResultListener) -> a
     io.flutter.plugin.common.PluginRegistry$Registrar addRequestPermissionsResultListener(io.flutter.plugin.common.PluginRegistry$RequestPermissionsResultListener) -> a
     io.flutter.plugin.common.BinaryMessenger messenger() -> c
     android.content.Context context() -> d
-io.flutter.plugin.common.PluginRegistry$RequestPermissionsResultListener -> c.a.b.a.k$d:
+io.flutter.plugin.common.PluginRegistry$RequestPermissionsResultListener -> c.a.b.a.l$d:
     boolean onRequestPermissionsResult(int,java.lang.String[],int[]) -> a
-io.flutter.plugin.common.PluginRegistry$UserLeaveHintListener -> c.a.b.a.k$e:
+io.flutter.plugin.common.PluginRegistry$UserLeaveHintListener -> c.a.b.a.l$e:
     void onUserLeaveHint() -> a
-io.flutter.plugin.common.PluginRegistry$ViewDestroyListener -> c.a.b.a.k$f:
+io.flutter.plugin.common.PluginRegistry$ViewDestroyListener -> c.a.b.a.l$f:
     boolean onViewDestroy(io.flutter.view.FlutterNativeView) -> a
-io.flutter.plugin.common.StandardMessageCodec -> c.a.b.a.l:
+io.flutter.plugin.common.StandardMessageCodec -> c.a.b.a.m:
     java.nio.charset.Charset UTF8 -> c
     io.flutter.plugin.common.StandardMessageCodec INSTANCE -> a
     boolean LITTLE_ENDIAN -> b
@@ -1509,9 +1539,9 @@ io.flutter.plugin.common.StandardMessageCodec -> c.a.b.a.l:
     void writeInt(java.io.ByteArrayOutputStream,int) -> c
     int readSize(java.nio.ByteBuffer) -> d
     void writeSize(java.io.ByteArrayOutputStream,int) -> d
-io.flutter.plugin.common.StandardMessageCodec$ExposedByteArrayOutputStream -> c.a.b.a.l$a:
+io.flutter.plugin.common.StandardMessageCodec$ExposedByteArrayOutputStream -> c.a.b.a.m$a:
     byte[] buffer() -> a
-io.flutter.plugin.common.StandardMethodCodec -> c.a.b.a.m:
+io.flutter.plugin.common.StandardMethodCodec -> c.a.b.a.n:
     io.flutter.plugin.common.StandardMessageCodec messageCodec -> a
     io.flutter.plugin.common.StandardMethodCodec INSTANCE -> b
     io.flutter.plugin.common.MethodCall decodeMethodCall(java.nio.ByteBuffer) -> a
@@ -1519,7 +1549,7 @@ io.flutter.plugin.common.StandardMethodCodec -> c.a.b.a.m:
     java.nio.ByteBuffer encodeMethodCall(io.flutter.plugin.common.MethodCall) -> a
     java.nio.ByteBuffer encodeSuccessEnvelope(java.lang.Object) -> a
     java.lang.Object decodeEnvelope(java.nio.ByteBuffer) -> b
-io.flutter.plugin.common.StringCodec -> c.a.b.a.n:
+io.flutter.plugin.common.StringCodec -> c.a.b.a.o:
     java.nio.charset.Charset UTF8 -> a
     io.flutter.plugin.common.StringCodec INSTANCE -> b
     java.lang.Object decodeMessage(java.nio.ByteBuffer) -> a
@@ -1784,7 +1814,43 @@ io.flutter.plugin.platform.VirtualDisplayController$OneTimeOnDrawListener -> io.
     void schedule(android.view.View,java.lang.Runnable) -> a
 io.flutter.plugin.platform.VirtualDisplayController$OneTimeOnDrawListener$1 -> io.flutter.plugin.platform.j$b$a:
     io.flutter.plugin.platform.VirtualDisplayController$OneTimeOnDrawListener this$0 -> a
-io.flutter.plugins.flutter_plugin_android_lifecycle.FlutterAndroidLifecyclePlugin -> io.flutter.plugins.a.a:
+io.flutter.plugins.connectivity.Connectivity -> io.flutter.plugins.a.a:
+    android.net.ConnectivityManager connectivityManager -> a
+    android.net.wifi.WifiManager wifiManager -> b
+    android.net.ConnectivityManager getConnectivityManager() -> a
+    java.lang.String getNetworkType() -> b
+    java.lang.String getWifiBSSID() -> c
+    java.lang.String getWifiIPAddress() -> d
+    java.lang.String getWifiName() -> e
+    java.lang.String getNetworkTypeLegacy() -> f
+    android.net.wifi.WifiInfo getWifiInfo() -> g
+io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver -> io.flutter.plugins.a.b:
+    android.content.Context context -> a
+    android.os.Handler mainHandler -> d
+    io.flutter.plugin.common.EventChannel$EventSink events -> c
+    io.flutter.plugins.connectivity.Connectivity connectivity -> b
+    void access$000(io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver) -> a
+    android.net.ConnectivityManager$NetworkCallback getNetworkCallback() -> a
+    void onCancel(java.lang.Object) -> a
+    void onListen(java.lang.Object,io.flutter.plugin.common.EventChannel$EventSink) -> a
+    io.flutter.plugins.connectivity.Connectivity access$100(io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver) -> b
+    void sendEvent() -> b
+    io.flutter.plugin.common.EventChannel$EventSink access$200(io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver) -> c
+io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver$1 -> io.flutter.plugins.a.b$a:
+    io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver this$0 -> a
+io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver$2 -> io.flutter.plugins.a.b$b:
+    io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver this$0 -> a
+io.flutter.plugins.connectivity.ConnectivityMethodChannelHandler -> io.flutter.plugins.a.c:
+    io.flutter.plugins.connectivity.Connectivity connectivity -> a
+    void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result) -> a
+io.flutter.plugins.connectivity.ConnectivityPlugin -> io.flutter.plugins.a.d:
+    io.flutter.plugin.common.EventChannel eventChannel -> b
+    io.flutter.plugin.common.MethodChannel methodChannel -> a
+    void onDetachedFromEngine(io.flutter.embedding.engine.plugins.FlutterPlugin$FlutterPluginBinding) -> a
+    void setupChannels(io.flutter.plugin.common.BinaryMessenger,android.content.Context) -> a
+    void teardownChannels() -> a
+    void onAttachedToEngine(io.flutter.embedding.engine.plugins.FlutterPlugin$FlutterPluginBinding) -> b
+io.flutter.plugins.flutter_plugin_android_lifecycle.FlutterAndroidLifecyclePlugin -> io.flutter.plugins.b.a:
     void registerWith(io.flutter.plugin.common.PluginRegistry$Registrar) -> a
 io.flutter.plugins.imagepicker.ExifDataCopier -> io.flutter.plugins.imagepicker.a:
     void copyExif(java.lang.String,java.lang.String) -> a
@@ -1946,19 +2012,19 @@ io.flutter.plugins.imagepicker.ImageResizer -> io.flutter.plugins.imagepicker.f:
     boolean isImageQualityValid(java.lang.Integer) -> a
     java.lang.String resizeImageIfNeeded(java.lang.String,java.lang.Double,java.lang.Double,java.lang.Integer) -> a
     java.io.File resizedImage(android.graphics.Bitmap,java.lang.Double,java.lang.Double,java.lang.Integer,java.lang.String) -> a
-io.flutter.plugins.sharedpreferences.MethodCallHandlerImpl -> io.flutter.plugins.b.a:
+io.flutter.plugins.sharedpreferences.MethodCallHandlerImpl -> io.flutter.plugins.c.a:
     android.content.SharedPreferences preferences -> a
     void commitAsync(android.content.SharedPreferences$Editor,io.flutter.plugin.common.MethodChannel$Result) -> a
     java.util.List decodeList(java.lang.String) -> a
     java.lang.String encodeList(java.util.List) -> a
     java.util.Map getAllPrefs() -> a
     void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result) -> a
-io.flutter.plugins.sharedpreferences.MethodCallHandlerImpl$1 -> io.flutter.plugins.b.a$a:
+io.flutter.plugins.sharedpreferences.MethodCallHandlerImpl$1 -> io.flutter.plugins.c.a$a:
     android.content.SharedPreferences$Editor val$editor -> a
     io.flutter.plugin.common.MethodChannel$Result val$result -> b
     java.lang.Boolean doInBackground(java.lang.Void[]) -> a
     void onPostExecute(java.lang.Boolean) -> a
-io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin -> io.flutter.plugins.b.b:
+io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin -> io.flutter.plugins.c.b:
     io.flutter.plugin.common.MethodChannel channel -> a
     void onDetachedFromEngine(io.flutter.embedding.engine.plugins.FlutterPlugin$FlutterPluginBinding) -> a
     void setupChannel(io.flutter.plugin.common.BinaryMessenger,android.content.Context) -> a

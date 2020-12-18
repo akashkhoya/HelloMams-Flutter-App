@@ -9,6 +9,7 @@ MERGED from [:shared_preferences_web] /Users/brahmdeepsingh/Desktop/VIVEK/Flutte
 MERGED from [:shared_preferences_macos] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams-Flutter-App/build/shared_preferences_macos/intermediates/library_manifest/release/AndroidManifest.xml:2:1-7:12
 MERGED from [:image_picker] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams-Flutter-App/build/image_picker/intermediates/library_manifest/release/AndroidManifest.xml:2:1-22:12
 MERGED from [:flutter_plugin_android_lifecycle] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams-Flutter-App/build/flutter_plugin_android_lifecycle/intermediates/library_manifest/release/AndroidManifest.xml:2:1-7:12
+MERGED from [:connectivity] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams-Flutter-App/build/connectivity/intermediates/library_manifest/release/AndroidManifest.xml:2:1-10:12
 MERGED from [:geocoder] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams-Flutter-App/build/geocoder/intermediates/library_manifest/release/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.multidex:multidex:2.0.0] /Users/brahmdeepsingh/.gradle/caches/transforms-2/files-2.1/2b16ac6c4193835014f293427ee35afa/multidex-2.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.fragment:fragment:1.1.0] /Users/brahmdeepsingh/.gradle/caches/transforms-2/files-2.1/0986d0d74b8a2c7da8161f6370fc7744/fragment-1.1.0/AndroidManifest.xml:17:1-24:12
@@ -105,6 +106,8 @@ MERGED from [:image_picker] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMam
 MERGED from [:image_picker] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams-Flutter-App/build/image_picker/intermediates/library_manifest/release/AndroidManifest.xml:5:5-44
 MERGED from [:flutter_plugin_android_lifecycle] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams-Flutter-App/build/flutter_plugin_android_lifecycle/intermediates/library_manifest/release/AndroidManifest.xml:5:5-44
 MERGED from [:flutter_plugin_android_lifecycle] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams-Flutter-App/build/flutter_plugin_android_lifecycle/intermediates/library_manifest/release/AndroidManifest.xml:5:5-44
+MERGED from [:connectivity] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams-Flutter-App/build/connectivity/intermediates/library_manifest/release/AndroidManifest.xml:5:5-44
+MERGED from [:connectivity] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams-Flutter-App/build/connectivity/intermediates/library_manifest/release/AndroidManifest.xml:5:5-44
 MERGED from [:geocoder] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams-Flutter-App/build/geocoder/intermediates/library_manifest/release/AndroidManifest.xml:5:5-44
 MERGED from [:geocoder] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams-Flutter-App/build/geocoder/intermediates/library_manifest/release/AndroidManifest.xml:5:5-44
 MERGED from [androidx.multidex:multidex:2.0.0] /Users/brahmdeepsingh/.gradle/caches/transforms-2/files-2.1/2b16ac6c4193835014f293427ee35afa/multidex-2.0.0/AndroidManifest.xml:20:5-43
@@ -169,3 +172,11 @@ ADDED from [:image_picker] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams
 		ADDED from [:image_picker] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams-Flutter-App/build/image_picker/intermediates/library_manifest/release/AndroidManifest.xml:18:17-72
 	android:name
 		ADDED from [:image_picker] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams-Flutter-App/build/image_picker/intermediates/library_manifest/release/AndroidManifest.xml:17:17-67
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from [:connectivity] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams-Flutter-App/build/connectivity/intermediates/library_manifest/release/AndroidManifest.xml:7:5-79
+	android:name
+		ADDED from [:connectivity] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams-Flutter-App/build/connectivity/intermediates/library_manifest/release/AndroidManifest.xml:7:22-76
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from [:connectivity] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams-Flutter-App/build/connectivity/intermediates/library_manifest/release/AndroidManifest.xml:8:5-76
+	android:name
+		ADDED from [:connectivity] /Users/brahmdeepsingh/Desktop/VIVEK/Flutter/HelloMams-Flutter-App/build/connectivity/intermediates/library_manifest/release/AndroidManifest.xml:8:22-73
