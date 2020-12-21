@@ -86,7 +86,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget renderDoneBtn() {
     return Container(
       child: new Center(
-        child: Text("Continue",style: TextStyle(color:ColorStyle().color_red,fontWeight: FontWeight.bold,fontSize: 16),),
+        child: Text("Continue",style: TextStyle(color:ColorStyle().color_red,fontWeight: FontWeight.bold,fontSize: 14),),
       )
     );
   }
@@ -121,6 +121,25 @@ class _SplashScreenState extends State<SplashScreen> {
       colorDot:ColorStyle().color_gray,
       colorActiveDot:ColorStyle().color_red,
       sizeDot: 9.0,
+    );
+  }
+}
+
+class SingleSplash extends StatefulWidget {
+  @override
+  _SingleSplashState createState() => _SingleSplashState();
+}
+
+class _SingleSplashState extends State<SingleSplash> {
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      child: new Image.asset('images/splash.jpeg',fit: BoxFit.fill,)
     );
   }
 }

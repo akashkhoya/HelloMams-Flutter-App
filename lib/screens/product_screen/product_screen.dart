@@ -408,19 +408,19 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
                                           children: <Widget>[
                                             new Container(
                                               padding: EdgeInsets.only(top: 5,left: 10),
-                                              child: new Text('# '+parts[0],
+                                              child: new Text('● '+parts[0],
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,),
                                             ),
                                             new Container(
                                               padding: EdgeInsets.only(top: 5,left: 10),
-                                              child: new Text( '# '+parts[1],
+                                              child: new Text( '● '+parts[1],
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,),
                                             ),
                                             new Container(
                                               padding: EdgeInsets.only(top: 5,left: 10),
-                                              child: new Text( '# '+parts[2],
+                                              child: new Text( '● '+parts[2],
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,),
                                             )
