@@ -250,9 +250,10 @@ class _LoginPageState extends State<LoginPage> implements LoginScreenContract {
     );
   }
 
-  sharepref(bool data) async {
+  sharepref(bool data,String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('login_status', data);
+    prefs.setString('token', token);
   }
 
   void _openPage(){
@@ -493,8 +494,11 @@ class _LoginPageState extends State<LoginPage> implements LoginScreenContract {
     // TODO: implement onClientLoginSuccess
     _onLoading(false);
     if(response.statusCode== 200){
+      setState(() {
+        TOKEN =response.value.valueData.access_token;
+      });
       new SharedPreferencesClass().setloginstatus('true');
-      sharepref(true);
+      sharepref(true,TOKEN);
       _openPage();
     }else{
       dialogs('');

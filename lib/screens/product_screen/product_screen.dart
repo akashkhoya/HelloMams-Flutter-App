@@ -1,9 +1,14 @@
 import 'package:beinglearners/api/data/rest_ds.dart';
 import 'package:beinglearners/common/colors.dart';
+import 'package:beinglearners/common/constant.dart';
+import 'package:beinglearners/model/add_to_cart.dart';
 import 'package:beinglearners/model/product.dart';
 import 'package:beinglearners/model/sub_category.dart';
+import 'package:beinglearners/screens/checkout_summary_screen/checkout_summary_screen.dart';
 import 'package:beinglearners/screens/product_screen/product_screen_presenter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_page_transition/flutter_page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 List<SubCateData> sub_cate_List ;
 List<ProductDataList> product_List ;
@@ -34,15 +39,28 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
     _presenter = new ProductScreenPresenter(this);
   }
 
+  sharepref() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      TOKEN= prefs.getString('token');
+    });
+  }
 
   @override
   void initState() {
     // TODO: implement initState
+    sharepref();
     _presenter.getSubCategory(widget.category_id);
      loadingStatus =true;
      setState(() {
        sub_cate_listSize = 0 ;
        product_listSize = 0 ;
+       product_count=0;
+       add_to_cart_count=0;
+       total_item=0;
+       total_time=0;
+       total_amount=0;
+       card_visivility =true;
      });
     super.initState();
 
@@ -141,19 +159,29 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
                 child: new Container(
                   child: new Column(
                     children: <Widget>[
-                      new Container(
-                        margin: EdgeInsets.only(top: 15),
-                        height: 40,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(6)),
-                          color: Colors.green
-                        ),
-                        child: new Center(
-                          child: new Text('Checkout',
-                          style: new TextStyle(color: ColorStyle().color_white,fontSize: 18,fontWeight: FontWeight.bold),),
-                        ),
-                      ),
+                     new GestureDetector(
+                       onTap: (){
+                         if(add_to_cart_count==0){
+
+                         }else{
+                           Navigator.push(context, PageTransition(type:PageTransitionType.custom, duration: Duration(seconds: 0), child: CheckoutSummaryScreen()));
+                         }
+
+                       },
+                       child:  new Container(
+                         margin: EdgeInsets.only(top: 15),
+                         height: 40,
+                         width: 150,
+                         decoration: BoxDecoration(
+                             borderRadius: BorderRadius.all(Radius.circular(6)),
+                             color: add_to_cart_count==0?ColorStyle().color_gray_light:Colors.green
+                         ),
+                         child: new Center(
+                           child: new Text('Checkout',
+                             style: new TextStyle(color: ColorStyle().color_white,fontSize: 18,fontWeight: FontWeight.bold),),
+                         ),
+                       ),
+                     ),
                       new Container(
                         margin: EdgeInsets.only(top: 5),
                         child:  new Text('Min. Checkout Time is 50 mins',
@@ -344,6 +372,7 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
                                                        String des =product_List[index].minimumServiceTime;
                                                        var part = des.split('min');
                                                        total_time =int.parse(part[0]);
+                                                       _presenter.getAddToCart(product_count.toString(),product_List[index].id,TOKEN);
 
                                                      });
                                                     },
@@ -416,6 +445,7 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
                                                             total_item=product_count;
                                                             total_amount=int.parse(product_List[index].productStandardPrice)*product_count;
                                                             total_time =total_time*product_count;
+                                                            _presenter.getAddToCart(product_count.toString(),product_List[index].id,TOKEN);
                                                           });
                                                         },
                                                         child: new Container(
@@ -528,5 +558,19 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
    setState(() {
      product_listSize=0;
    });
+  }
+
+  @override
+  void onAddToCartError(String errorTxt) {
+    // TODO: implement onAddToCartError
+  }
+
+  @override
+  void onAddToCartSuccess(AddToCart response) {
+    // TODO: implement onAddToCartSuccess
+    if(response.value!=null){
+      String message =response.value;
+      print(message);
+    }
   }
 }

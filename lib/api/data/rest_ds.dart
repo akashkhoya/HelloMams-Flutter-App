@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:beinglearners/api/utils/network_util.dart';
+import 'package:beinglearners/model/add_to_cart.dart';
 import 'package:beinglearners/model/category.dart';
+import 'package:beinglearners/model/getcart.dart';
 import 'package:beinglearners/model/product.dart';
 import 'package:beinglearners/model/slider.dart';
 import 'package:beinglearners/model/comments/comment.dart';
@@ -55,6 +57,36 @@ class RestDataSource {
 
     return _netUtil.get(BASE_URL+'/api/Account/GetProductsBySubCatAndCatID?CategoryID='+cateId+'&SubCategoryID='+subCateId,).then((dynamic res) {
       return new ProductData.fromJson(res);
+    });
+  }
+
+  Future<AddToCart> addToCart(String quantity,String productID,String token) {
+    Map<String, String> headers = {
+      "Authorization": 'Bearer '+token,
+    };
+
+    return _netUtil.post(BASE_URL+'/api/Account/AddToCart?productID='+productID+'&quantity='+quantity,headers: headers).then((dynamic res) {
+      return new AddToCart.fromJson(res);
+    });
+  }
+
+  Future<GetCartData> getCart(String token) {
+    Map<String, String> headers = {
+      "Authorization": 'Bearer '+token,
+    };
+
+    return _netUtil.post(BASE_URL+'/api/Account/GetCart',headers: headers).then((dynamic res) {
+      return new GetCartData.fromJson(res);
+    });
+  }
+
+  Future<AddToCart> getDeleteCart(String token,String cartID) {
+    Map<String, String> headers = {
+      "Authorization": 'Bearer '+token,
+    };
+
+    return _netUtil.post(BASE_URL+'/api/Account/DeleteCart?cartID='+cartID,headers: headers).then((dynamic res) {
+      return new AddToCart.fromJson(res);
     });
   }
 }

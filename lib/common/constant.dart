@@ -13,3 +13,4 @@ CommentData COMMENT_RESPONSE;
 String TITLE ="";
 String SLUG ="";
 bool category=false;
+String TOKEN='';
