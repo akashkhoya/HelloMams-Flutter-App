@@ -13,6 +13,11 @@ int sub_cate_listSize = 0 ;
 int product_listSize = 0 ;
 String click_id='';
 int product_count=0;
+bool card_visivility = true;
+int total_amount=0;
+int total_item=0;
+int total_time=0;
+int add_to_cart_count=0;
 
 class ProductScreen extends StatefulWidget {
   String category_name,category_id;
@@ -67,7 +72,7 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
                   borderRadius: BorderRadius.all(Radius.circular(50))
                 ),
                 child: new Center(
-                  child: new Text('0',
+                  child: new Text(add_to_cart_count.toString(),
                   style: TextStyle(color: ColorStyle().color_black,fontSize: 8,fontWeight: FontWeight.bold),),
                 )
               )
@@ -95,7 +100,7 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
                               style: new TextStyle(color: ColorStyle().color_black,fontWeight: FontWeight.bold),),
                           ),
                           new Container(
-                            child: new Text(' ₹0',
+                            child: new Text(' ₹ '+total_amount.toString(),
                             style: new TextStyle(color: ColorStyle().color_white,fontWeight: FontWeight.bold),),
                           )
                         ],
@@ -105,11 +110,11 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
                         children: <Widget>[
                           new Container(
                             padding: EdgeInsets.only(left: 20),
-                            child: new Text('Total Items:',
+                            child: new Text('Total Items: ',
                               style: new TextStyle(color: ColorStyle().color_black,fontWeight: FontWeight.bold),),
                           ),
                           new Container(
-                            child: new Text(' 0',
+                            child: new Text(total_item.toString(),
                               style: new TextStyle(color: ColorStyle().color_white,fontWeight: FontWeight.bold),),
                           )
                         ],
@@ -123,7 +128,7 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
                               style: new TextStyle(color: ColorStyle().color_black,fontWeight: FontWeight.bold),),
                           ),
                           new Container(
-                            child: new Text(' 0 min',
+                            child: new Text(total_time.toString()+'  min',
                               style: new TextStyle(color: ColorStyle().color_white,fontWeight: FontWeight.bold),),
                           )
                         ],
@@ -246,6 +251,7 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
                 ):new ListView.builder(
                     itemCount: product_List.length,
                     itemBuilder: (context,index){
+                      // total_time=int.parse(product_List[index].minimumServiceTime);
                       return new Container(
                         margin: EdgeInsets.only(left: 6,right: 6,top: 5),
                         child: new Card(
@@ -326,7 +332,21 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
                                               ),
                                               new Row(
                                                 children: <Widget>[
-                                                  new GestureDetector(
+                                                  card_visivility?new GestureDetector(
+                                                    onTap: (){
+                                                     setState(() {
+                                                       product_count=1;
+                                                       add_to_cart_count=1;
+                                                       total_item=1;
+                                                       total_amount=int.parse(product_List[index].productStandardPrice);
+                                                       card_visivility =false;
+
+                                                       String des =product_List[index].minimumServiceTime;
+                                                       var part = des.split('min');
+                                                       total_time =int.parse(part[0]);
+
+                                                     });
+                                                    },
                                                     child: new Container(
                                                       margin: EdgeInsets.only(top: 10),
                                                       height: 30,
@@ -340,52 +360,79 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
                                                           style: TextStyle(color: ColorStyle().color_white,fontWeight: FontWeight.bold),)
                                                       ),
                                                     ),
-                                                  ),
-                                                  /*new GestureDetector(
-                                                    onTap: (){
+                                                  ):
+                                                  new Row(
+                                                    children: <Widget>[
+                                                      new GestureDetector(
+                                                        onTap: (){
+                                                          setState(() {
+                                                            if(product_count>1){
+                                                              product_count--;
+                                                              add_to_cart_count=1;
+                                                              total_item=product_count;
+                                                              total_amount=int.parse(product_List[index].productStandardPrice)*product_count;
+                                                              total_time =total_time*product_count;
+                                                            }else{
+                                                              setState(() {
+                                                                add_to_cart_count=0;
+                                                                total_item=0;
+                                                                total_amount=0;
+                                                                total_time=0;
+                                                                card_visivility =true;
+                                                              });
+                                                            }
 
-                                                    },
-                                                    child: new Container(
-                                                      margin: EdgeInsets.only(top: 10,left: 10),
-                                                      height: 25,
-                                                      width: 25,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                                                          color: ColorStyle().color_red
+                                                          });
+                                                        },
+                                                        child: new Container(
+                                                          margin: EdgeInsets.only(top: 10,left: 10),
+                                                          height: 25,
+                                                          width: 25,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius: BorderRadius.all(Radius.circular(50)),
+                                                              color: ColorStyle().color_red
+                                                          ),
+                                                          child: new Center(
+                                                              child: new Icon(Icons.remove,size: 22,color: ColorStyle().color_white,)
+                                                          ),
+                                                        ),
                                                       ),
-                                                      child: new Center(
-                                                        child: new Icon(Icons.remove,size: 22,color: ColorStyle().color_white,)
+                                                      new GestureDetector(
+                                                        child: new Container(
+                                                          margin: EdgeInsets.only(top: 10),
+                                                          height: 30,
+                                                          width: 40,
+                                                          child: new Center(
+                                                            child: new Text(product_count.toString(),
+                                                              style: new TextStyle(color: ColorStyle().color_black,fontWeight: FontWeight.bold,fontSize: 18),),
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ),
-                                                  new GestureDetector(
-                                                    child: new Container(
-                                                      margin: EdgeInsets.only(top: 10),
-                                                      height: 30,
-                                                      width: 40,
-                                                      child: new Center(
-                                                        child: new Text(product_count.toString(),
-                                                          style: new TextStyle(color: ColorStyle().color_black,fontWeight: FontWeight.bold,fontSize: 18),),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  new GestureDetector(
-                                                    onTap: (){
-
-                                                    },
-                                                    child: new Container(
-                                                      margin: EdgeInsets.only(top: 10),
-                                                      height: 25,
-                                                      width: 25,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                                                          color: ColorStyle().color_red
-                                                      ),
-                                                      child: new Center(
-                                                        child: new Icon(Icons.add,size: 22,color: ColorStyle().color_white,)
-                                                      ),
-                                                    ),
-                                                  )*/
+                                                      new GestureDetector(
+                                                        onTap: (){
+                                                          setState(() {
+                                                            product_count++;
+                                                            add_to_cart_count=1;
+                                                            total_item=product_count;
+                                                            total_amount=int.parse(product_List[index].productStandardPrice)*product_count;
+                                                            total_time =total_time*product_count;
+                                                          });
+                                                        },
+                                                        child: new Container(
+                                                          margin: EdgeInsets.only(top: 10),
+                                                          height: 25,
+                                                          width: 25,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius: BorderRadius.all(Radius.circular(50)),
+                                                              color: ColorStyle().color_red
+                                                          ),
+                                                          child: new Center(
+                                                              child: new Icon(Icons.add,size: 22,color: ColorStyle().color_white,)
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )
                                                 ],
                                               )
                                             ],
