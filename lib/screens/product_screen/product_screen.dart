@@ -2,6 +2,7 @@ import 'package:beinglearners/api/data/rest_ds.dart';
 import 'package:beinglearners/common/colors.dart';
 import 'package:beinglearners/common/constant.dart';
 import 'package:beinglearners/model/add_to_cart.dart';
+import 'package:beinglearners/model/getcart.dart';
 import 'package:beinglearners/model/product.dart';
 import 'package:beinglearners/model/sub_category.dart';
 import 'package:beinglearners/screens/checkout_summary_screen/checkout_summary_screen.dart';
@@ -22,7 +23,7 @@ bool card_visivility = true;
 int total_amount=0;
 int total_item=0;
 int total_time=0;
-int add_to_cart_count=0;
+
 
 class ProductScreen extends StatefulWidget {
   String category_name,category_id;
@@ -75,27 +76,33 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
         backgroundColor: ColorStyle().color_red,
         title: new Text(widget.category_name),
         actions: <Widget>[
-          new Stack(
-            children: <Widget>[
-              new Container(
-                padding: EdgeInsets.only(right: 20,top: 15),
-                child: new Icon(Icons.shopping_cart,color: ColorStyle().color_white,size: 30,),
-              ),
-              new Container(
-                  margin: EdgeInsets.only(left: 20,top: 10),
-                height: 15,
-                width: 15,
-                decoration: BoxDecoration(
-                  color: ColorStyle().color_white,
-                  borderRadius: BorderRadius.all(Radius.circular(50))
+          new GestureDetector(
+            onTap: (){
+              Navigator.push(context, PageTransition(type:PageTransitionType.custom, duration: Duration(seconds: 0), child: CheckoutSummaryScreen()));
+            },
+            child:new Stack(
+              children: <Widget>[
+                new Container(
+                  padding: EdgeInsets.only(right: 20,top: 15),
+                  child: new Icon(Icons.shopping_cart,color: ColorStyle().color_white,size: 30,),
                 ),
-                child: new Center(
-                  child: new Text(add_to_cart_count.toString(),
-                  style: TextStyle(color: ColorStyle().color_black,fontSize: 8,fontWeight: FontWeight.bold),),
+                new Container(
+                    margin: EdgeInsets.only(left: 20,top: 10),
+                    height: 15,
+                    width: 15,
+                    decoration: BoxDecoration(
+                        color: ColorStyle().color_white,
+                        borderRadius: BorderRadius.all(Radius.circular(50))
+                    ),
+                    child: new Center(
+                      child: new Text(add_to_cart_count.toString(),
+                        style: TextStyle(color: ColorStyle().color_black,fontSize: 8,fontWeight: FontWeight.bold),),
+                    )
                 )
-              )
-            ],
+              ],
+            )
           )
+
         ],
       ),
       body: widget_body(),
@@ -529,7 +536,6 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
           click_id=sub_cate_List[0].id;
         });
         _presenter.getProduct(sub_cate_List[0].categoryID,sub_cate_List[0].id);
-        // _presenter.getProduct('D0578025-99C3-4C9B-BD6E-1407D71B42E5','5765687B-B7D6-4884-A339-B6242F08B181');
       }
 
     });
@@ -549,6 +555,7 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
       product_List =response.productList;
       product_listSize =product_List.length;
     });
+    _presenter.getCart(TOKEN);
   }
 
   @override
@@ -571,6 +578,21 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
     if(response.value!=null){
       String message =response.value;
       print(message);
+      _presenter.getCart(TOKEN);
+
     }
+  }
+
+  @override
+  void onGetCartError(String errorTxt) {
+    // TODO: implement onGetCartError
+  }
+
+  @override
+  void onGetCartSuccess(GetCartData response) {
+    // TODO: implement onGetCartSuccess
+   setState(() {
+     add_to_cart_count =response.getCartList.length;
+   });
   }
 }

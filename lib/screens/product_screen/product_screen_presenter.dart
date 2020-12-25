@@ -1,6 +1,7 @@
 import 'package:beinglearners/api/data/rest_ds.dart';
 import 'package:beinglearners/model/add_to_cart.dart';
 import 'package:beinglearners/model/category.dart';
+import 'package:beinglearners/model/getcart.dart';
 import 'package:beinglearners/model/product.dart';
 import 'package:beinglearners/model/slider.dart';
 import 'package:beinglearners/model/sub_category.dart';
@@ -13,6 +14,8 @@ abstract class ProductScreenContract {
   void onProductDataError(String errorTxt);
   void onAddToCartSuccess(AddToCart response);
   void onAddToCartError(String errorTxt);
+  void onGetCartSuccess(GetCartData response);
+  void onGetCartError(String errorTxt);
 
 }
 
@@ -39,5 +42,10 @@ class ProductScreenPresenter {
       _view.onAddToCartSuccess(res);
     }).catchError((Object error) => _view.onAddToCartError(error.toString()));
   }
-  
+
+  getCart(String token) {
+    api.getCart(token).then((GetCartData res) {
+      _view.onGetCartSuccess(res);
+    }).catchError((Object error) => _view.onGetCartError(error.toString()));
+  }
 }

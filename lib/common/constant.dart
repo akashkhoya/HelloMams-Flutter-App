@@ -14,3 +14,4 @@ String TITLE ="";
 String SLUG ="";
 bool category=false;
 String TOKEN='';
+int add_to_cart_count=0;

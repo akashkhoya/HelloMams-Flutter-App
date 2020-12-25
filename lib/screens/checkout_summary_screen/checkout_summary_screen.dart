@@ -1,8 +1,10 @@
 import 'package:beinglearners/api/data/rest_ds.dart';
 import 'package:beinglearners/common/colors.dart';
+import 'package:beinglearners/common/constant.dart';
 import 'package:beinglearners/model/add_to_cart.dart';
 import 'package:beinglearners/model/getcart.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'checkout_summary_screen_presenter.dart';
 
@@ -12,6 +14,7 @@ int get_cart_listSize = 0 ;
 int product_listSize = 0 ;
 String click_id='';
 double payable_amount=0;
+String cart_id='';
 
 class CheckoutSummaryScreen extends StatefulWidget {
 
@@ -200,6 +203,7 @@ class _CheckoutSummaryScreenState extends State<CheckoutSummaryScreen> implement
                         new Expanded(
                             child: new GestureDetector(
                               onTap: (){
+                                cart_id=get_cart_List[index].id;
                                 _presenter.getDelete(token,get_cart_List[index].id);
                               },
                               child: new Container(
@@ -233,7 +237,10 @@ class _CheckoutSummaryScreenState extends State<CheckoutSummaryScreen> implement
       get_cart_List =response.getCartList;
       get_cart_listSize =get_cart_List.length;
      setState(() {
-       payable_amount =get_cart_List[0].totalAmount;
+       for(int i=0;i<get_cart_List.length;i++){
+         payable_amount += get_cart_List[i].totalAmount;
+       }
+
      });
     });
   }
@@ -247,8 +254,13 @@ class _CheckoutSummaryScreenState extends State<CheckoutSummaryScreen> implement
   void onDeleteCartSuccess(AddToCart response) {
     // TODO: implement onDeleteCartSuccess
     setState(() {
-      get_cart_listSize =0;
+      get_cart_List.removeWhere((item) => item.id == cart_id);
+      get_cart_listSize =get_cart_List.length;
+      add_to_cart_count = get_cart_List.length;
       payable_amount=0;
+      for(int i=0;i<get_cart_List.length;i++){
+        payable_amount += get_cart_List[i].totalAmount;
+      }
     });
   }
 }
