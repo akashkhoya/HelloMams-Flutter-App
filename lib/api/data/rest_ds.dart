@@ -89,4 +89,14 @@ class RestDataSource {
       return new AddToCart.fromJson(res);
     });
   }
+
+  Future<AddToCart> insertOrder(String query,String token) {
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": 'Bearer '+token,
+    };
+    return _netUtil.post(BASE_URL+'/api/Account/InsertOrder', headers: headers,body: query).then((dynamic res) {
+      return new AddToCart.fromJson(res);
+    });
+  }
 }

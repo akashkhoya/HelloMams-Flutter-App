@@ -182,6 +182,12 @@
       "languageVersion": "2.0"
     },
     {
+      "name": "date_format",
+      "rootUri": "file:///Users/brahmdeepsingh/Desktop/VIVEK/Android/flutter/.pub-cache/hosted/pub.dartlang.org/date_format-1.0.9",
+      "packageUri": "lib/",
+      "languageVersion": "2.0"
+    },
+    {
       "name": "dynamic_theme",
       "rootUri": "file:///Users/brahmdeepsingh/Desktop/VIVEK/Android/flutter/.pub-cache/hosted/pub.dartlang.org/dynamic_theme-1.0.1",
       "packageUri": "lib/",
@@ -242,6 +248,12 @@
       "languageVersion": "2.0"
     },
     {
+      "name": "fluttertoast",
+      "rootUri": "file:///Users/brahmdeepsingh/Desktop/VIVEK/Android/flutter/.pub-cache/hosted/pub.dartlang.org/fluttertoast-7.1.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.7"
+    },
+    {
       "name": "front_end",
       "rootUri": "file:///Users/brahmdeepsingh/Desktop/VIVEK/Android/flutter/.pub-cache/hosted/pub.dartlang.org/front_end-0.1.14",
       "packageUri": "lib/",
@@ -300,6 +312,12 @@
       "rootUri": "file:///Users/brahmdeepsingh/Desktop/VIVEK/Android/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.6.3+4",
       "packageUri": "lib/",
       "languageVersion": "2.0"
+    },
+    {
+      "name": "intl",
+      "rootUri": "file:///Users/brahmdeepsingh/Desktop/VIVEK/Android/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.16.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.5"
     },
     {
       "name": "intro_slider",
@@ -584,7 +602,7 @@
       "languageVersion": "2.1"
     }
   ],
-  "generated": "2020-12-25T19:58:05.396669Z",
+  "generated": "2020-12-27T19:32:58.200894Z",
   "generator": "pub",
   "generatorVersion": "2.8.3"
 }

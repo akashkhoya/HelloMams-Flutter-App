@@ -3,7 +3,9 @@ import 'package:beinglearners/common/colors.dart';
 import 'package:beinglearners/common/constant.dart';
 import 'package:beinglearners/model/add_to_cart.dart';
 import 'package:beinglearners/model/getcart.dart';
+import 'package:beinglearners/screens/order_place_screen/order_place_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_page_transition/flutter_page_transition.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'checkout_summary_screen_presenter.dart';
@@ -15,6 +17,7 @@ int product_listSize = 0 ;
 String click_id='';
 double payable_amount=0;
 String cart_id='';
+String user_id='';
 
 class CheckoutSummaryScreen extends StatefulWidget {
 
@@ -97,25 +100,33 @@ class _CheckoutSummaryScreenState extends State<CheckoutSummaryScreen> implement
                 )),
             new Expanded(
               flex: 1,
-                child: new Container(
-                  child: new Column(
-                    children: <Widget>[
-                      new Container(
-                        margin: EdgeInsets.only(top: 15),
-                        height: 40,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(6)),
-                          color: Colors.green
-                        ),
-                        child: new Center(
-                          child: new Text('Checkout',
-                          style: new TextStyle(color: ColorStyle().color_white,fontSize: 18,fontWeight: FontWeight.bold),),
-                        ),
-                      ),
+                child: new GestureDetector(
+                  onTap: (){
 
-                    ],
-                  ),
+                    Navigator.push(context, PageTransition(type:PageTransitionType.custom, duration: Duration(seconds: 0), child: OrderPlaceScreen(
+                        get_cart_List[0].id,get_cart_List[0].userID,payable_amount
+                    )));
+                  },
+                  child: new Container(
+                    child: new Column(
+                      children: <Widget>[
+                        new Container(
+                          margin: EdgeInsets.only(top: 15),
+                          height: 40,
+                          width: 150,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(6)),
+                              color: Colors.green
+                          ),
+                          child: new Center(
+                            child: new Text('Checkout',
+                              style: new TextStyle(color: ColorStyle().color_white,fontSize: 18,fontWeight: FontWeight.bold),),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  )
                 ))
           ],
         ),
