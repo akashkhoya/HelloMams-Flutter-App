@@ -4,7 +4,9 @@ import 'package:beinglearners/common/colors.dart';
 import 'package:beinglearners/common/constant.dart';
 import 'package:beinglearners/common/shared_preferences.dart';
 import 'package:beinglearners/model/category.dart';
+import 'package:beinglearners/model/get_all_order.dart';
 import 'package:beinglearners/model/slider.dart';
+import 'package:beinglearners/screens/all_order/all_order.dart';
 import 'package:beinglearners/screens/edit_profile/edit_profile.dart';
 import 'package:beinglearners/screens/login_screen/login_screen.dart';
 import 'package:beinglearners/screens/product_screen/product_screen.dart';
@@ -116,6 +118,15 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
 //                        status==null||status==false?Navigator.push(context, PageTransition(type:PageTransitionType.custom, duration: Duration(seconds: 0), child: LoginPage())):
                         Navigator.pop(context);
 
+                      },
+                    ),
+                    ListTile(
+                      title: Text("My Order",
+                        style: new TextStyle(color: new ColorStyle().color_black,fontSize: 16),),
+                      leading: Icon(Icons.bookmark_border),
+                      onTap: (){
+                        Navigator.pop(context);
+                        Navigator.push(context, PageTransition(type:PageTransitionType.custom, duration: Duration(seconds: 0), child: AllOrderScreen()));
                       },
                     ),
                     ListTile(

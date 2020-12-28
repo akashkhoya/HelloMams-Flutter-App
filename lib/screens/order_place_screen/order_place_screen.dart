@@ -6,6 +6,7 @@ import 'package:beinglearners/model/add_to_cart.dart';
 import 'package:beinglearners/model/getcart.dart';
 import 'package:beinglearners/model/login.dart';
 import 'package:beinglearners/screens/home_screen/home_screen.dart';
+import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_page_transition/flutter_page_transition.dart';
@@ -14,6 +15,7 @@ import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'order_place_screen_presenter.dart';
+import 'package:geolocator/geolocator.dart';
 
 List<GetCartList> get_cart_List ;
 bool loadingStatus =true;
@@ -24,6 +26,21 @@ double payable_amount=0;
 String cart_id='';
 String order_date ='Select Date';
 bool checkedValue =false;
+String address ='';
+int day=0;
+int month=0;
+int year=0;
+String schedule_date='';
+bool slot1=true;
+bool slot2=false;
+bool slot3=false;
+bool slot4=false;
+bool slot5=false;
+bool slot6=false;
+bool slot7=false;
+bool slot8=false;
+bool slot9=false;
+
 
 class OrderPlaceScreen extends StatefulWidget {
   final String cart_id;
@@ -42,10 +59,14 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
   _OrderPlaceScreenState() {
     _presenter = new CheckOutSummaryScreenPresenter(this);
   }
+  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
+  Position _currentPosition;
+  String _currentAddress ='Current Address';
+  TextEditingController address_controller;
 
   DateTime _selectedDate = new DateTime.now(),
-      _firstDate = new DateTime.now().add(new Duration(days: 2));
+      _firstDate = new DateTime.now().subtract(new Duration(days: 2500));
 
   _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -60,6 +81,23 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
         order_date =new DateFormat('yyyy-MM-dd').format(picked);
       });
     }
+  }
+
+  custome_calendar(){
+    CalendarTimeline(
+      initialDate: DateTime(2020, 4, 20),
+      firstDate: DateTime(2019, 1, 15),
+      lastDate: DateTime(2020, 11, 20),
+      onDateSelected: (date) => print(date),
+      leftMargin: 20,
+      monthColor: Colors.blueGrey,
+      dayColor: Colors.teal[200],
+      activeDayColor: Colors.white,
+      activeBackgroundDayColor: Colors.redAccent[100],
+      dotsColor: Color(0xFF333A47),
+      selectableDayPredicate: (date) => date.day != 23,
+      locale: 'en_ISO',
+    );
   }
 
   void _onLoading(bool status) {
@@ -125,11 +163,11 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
       "paymentMethod": "Pay on Delivery",
       "transactionID": "string",
       "totalAmount": widget.total_amount,
-      "address": "Ansal API Palam Corporate Plaza, F-256, 1st Floor, B-Block, Palam Vihar, Gurugram, Haryana 122017",
+      "address": address,
       "orderStatus": "string",
       "paymentStatus": "string",
       "isCoupounApplied": true,
-      "createdAt": "2020-12-25T16:52:28.002Z",
+      "createdAt": '2020-12-25T16:52:28.002Z',
       "cartOrders": [
         {
           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -148,11 +186,62 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
     };
   }
 
+  _getCurrentLocation() {
+    geolocator
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      setState(() {
+        _currentPosition = position;
+      });
+
+      _getAddressFromLatLng();
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  _getAddressFromLatLng() async {
+    try {
+      List<Placemark> p = await geolocator.placemarkFromCoordinates(
+          _currentPosition.latitude, _currentPosition.longitude);
+
+      Placemark place = p[0];
+
+      setState(() {
+        _currentAddress =
+        "${place.thoroughfare},${place.name},${place.subLocality},${place.locality},${place.administrativeArea}, ${place.postalCode}, ${place.country}";
+        address_controller=new TextEditingController(text:_currentAddress);
+        address =_currentAddress;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
 
   @override
   void initState() {
     // TODO: implement initState
+    address_controller=new TextEditingController(text:_currentAddress);
     checkedValue =false;
+    _getCurrentLocation();
+    DateTime now = DateTime.now();
+    day = int.parse(new DateFormat('dd').format(now));
+    month = int.parse(new DateFormat('MM').format(now));
+    year = int.parse(new DateFormat('yyyy').format(now));
+setState(() {
+  slot1=true;
+  slot2=false;
+  slot3=false;
+  slot4=false;
+  slot5=false;
+  slot6=false;
+  slot7=false;
+  slot8=false;
+  slot9=false;
+  schedule_date=now.toString();
+  // schedule_date=now.toString()+'|'+'09:00 am - 09:30 am';
+});
 
     super.initState();
 
@@ -217,17 +306,26 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
                               )),
                           new Expanded(
                               flex: 2,
-                              child: new Container(
-                                child: new Text(' Get Location',
-                                  style: new TextStyle(color: ColorStyle().color_red,fontSize: 16),),
+                              child: new GestureDetector(
+                                onTap: (){
+                                  _getCurrentLocation();
+                                },
+                                child: new Container(
+                                  child: new Text(' Get Location',
+                                    style: new TextStyle(color: ColorStyle().color_red,fontSize: 16),),
+                                )
                               ))
                         ],
                       ),
                       new Container(
                         padding: EdgeInsets.all(10),
-                        child: new Text('Ansal API Palam Corporate Plaza, F-256, 1st Floor, B-Block, Palam Vihar, Gurugram, Haryana 122017',
-                        style: new TextStyle(fontSize: 15),),
-                      )
+                        child: new TextField(
+                          controller: address_controller,
+                          onChanged: (value){
+                            address =value;
+                          },
+                          maxLines: 2,
+                        ))
                     ],
                   )
                 )
@@ -253,76 +351,56 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
 
                             child: new Column(
                               children: <Widget>[
-
                                 new Container(
+                                  child:  CalendarTimeline(
+                                    initialDate: DateTime(year, month, day),
+                                    firstDate: DateTime(year, month, day),
+                                    lastDate: DateTime(2021, 12, 31),
+                                    onDateSelected: (date){
+                                      schedule_date = date.toString();
+                                      print(schedule_date);
+                                    },
+                                    leftMargin: 20,
+                                    monthColor: Colors.blueGrey,
+                                    dayColor: Colors.teal[200],
+                                    activeDayColor: Colors.white,
+                                    activeBackgroundDayColor: Colors.redAccent[100],
+                                    dotsColor: Color(0xFF333A47),
+                                    selectableDayPredicate: (date) => date.day != 23,
+                                    locale: 'en_ISO',
+                                  )
+                                )
+                                /*new Container(
                                   width: double.infinity,
                                   child: new Column(
                                     children: <Widget>[
+                                      new GestureDetector(
+                                          onTap: (){
+                                            _selectDate(context);
+                                            order_date = new DateFormat('dd-MMM-yyyy').format(_selectedDate);
+                                          },
+                                          child: new Row(
+                                            children: <Widget>[
+                                              new Container(
+                                                height: 35,
+                                                width: MediaQuery.of(context).size.width/2.2,
+                                                padding: const EdgeInsets.only(top: 10,left: 10),
+                                                decoration: new BoxDecoration(
 
-                                      new Row(
-                                        children: <Widget>[
-                                          new Container(
-                                            decoration: new BoxDecoration(
-                                              borderRadius: BorderRadius.circular(5),
-                                              color: ColorStyle().color_white,
-                                            ),
-                                            child: order_date==" "?
-                                            new GestureDetector(
-                                                onTap: (){
-                                                  _selectDate(context);
-                                                  setState(() {
-                                       order_date = new DateFormat('dd-MMM-yyyy').format(_selectedDate);
-//                                                     _dateOfBirthStatus=false;
-                                                  });
-                                                },
-                                                child: new Row(
-                                                  children: <Widget>[
-                                                    new Container(
-                                                      height: 35,
-                                                      width: MediaQuery.of(context).size.width/2.2,
-                                                      padding: new EdgeInsets.only(left:10.0),
-                                                      decoration: new BoxDecoration(
-                                                        borderRadius: BorderRadius.all(Radius.circular(5)),
-
-                                                      ),
-//                                      margin: const EdgeInsets.only(top: 10.0),
-                                                      child: new Text(order_date,
-                                                        style: new TextStyle(fontSize: 10.0,color: new ColorStyle().color_black,),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )
-                                            ):
-                                            new GestureDetector(
-                                                onTap: (){
-                                                  _selectDate(context);
-                                                  order_date = new DateFormat('dd-MMM-yyyy').format(_selectedDate);
-                                                },
-                                                child: new Row(
-                                                  children: <Widget>[
-                                                    new Container(
-                                                      height: 35,
-                                                      width: MediaQuery.of(context).size.width/2.2,
-                                                      padding: const EdgeInsets.only(top: 10,left: 10),
-                                                      decoration: new BoxDecoration(
-
-                                                      ),
-                                                      child: new Text(order_date,
+                                                ),
+                                                child: new Text(order_date,
 //                                      child: new Text(new DateFormat('dd-MMM-yyyy').format(_selectedDate),
-                                                        style: new TextStyle(fontSize: 10.0,color: new ColorStyle().color_black),
-                                                        textScaleFactor: 1.4,
+                                                  style: new TextStyle(fontSize: 10.0,color: new ColorStyle().color_black),
+                                                  textScaleFactor: 1.4,
 
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )
-                                            ),
+                                                ),
+                                              ),
+                                            ],
                                           )
-                                        ],
-                                      )
+                                      ),
                                     ],
                                   ),
-                                ),
+                                ),*/
                               ],
                             )
                         ),
@@ -342,31 +420,68 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
                           children: <Widget>[
                             new Expanded(
                                 flex: 1,
-                                child: new Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(width: 1,color: ColorStyle().color_gray),
-                                    borderRadius: BorderRadius.all(Radius.circular(5))
-                                  ),
-                                  height: 50,
-                                  margin: EdgeInsets.only(left: 5,right: 5),
-                                  child: new Center(
-                                    child: new Text('09:00 am - 09:30 am',
-                                    style: new TextStyle(fontSize: 14),),
-                                  ),
+                                child: new GestureDetector(
+                                  onTap: (){
+                                    setState(() {
+                                      slot1=true;
+                                      slot2=false;
+                                      slot3=false;
+                                      slot4=false;
+                                      slot5=false;
+                                      slot6=false;
+                                      slot7=false;
+                                      slot8=false;
+                                      slot9=false;
+                                      // schedule_date='';
+                                      // schedule_date=schedule_date+'|'+'09:00 am - 09:30 am';
+                                    });
+                                  },
+                                  child: new Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(width: 1,color: ColorStyle().color_gray),
+                                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                                      color: slot1?ColorStyle().color_red:ColorStyle().color_white
+
+                                    ),
+                                    height: 50,
+                                    margin: EdgeInsets.only(left: 5,right: 5),
+                                    child: new Center(
+                                      child: new Text('09:00 am - 09:30 am',
+                                        style: new TextStyle(fontSize: 14,color: slot1?ColorStyle().color_white:ColorStyle().color_dark_gray),),
+                                    ),
+                                  )
                                 )),
                             new Expanded(
                               flex: 1,
-                                child: new Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(width: 1,color: ColorStyle().color_gray),
-                                      borderRadius: BorderRadius.all(Radius.circular(5))
-                                  ),
-                                  height: 50,
-                                  margin: EdgeInsets.only(left: 5,right: 5),
-                                  child: new Center(
-                                    child: new Text('10:00 am - 10:30 am',
-                                      style: new TextStyle(fontSize: 14),),
-                                  ),
+                                child: new GestureDetector(
+                                  onTap: (){
+                                    setState(() {
+                                      slot1=false;
+                                      slot2=true;
+                                      slot3=false;
+                                      slot4=false;
+                                      slot5=false;
+                                      slot6=false;
+                                      slot7=false;
+                                      slot8=false;
+                                      slot9=false;
+                                      // schedule_date='';
+                                      // schedule_date=schedule_date+'|'+'10:00 am - 10:30 am';
+                                    });
+                                  },
+                                  child: new Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(width: 1,color: ColorStyle().color_gray),
+                                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                                        color: slot2?ColorStyle().color_red:ColorStyle().color_white
+                                    ),
+                                    height: 50,
+                                    margin: EdgeInsets.only(left: 5,right: 5),
+                                    child: new Center(
+                                      child: new Text('10:00 am - 10:30 am',
+                                        style: new TextStyle(fontSize: 14,color: slot2?ColorStyle().color_white:ColorStyle().color_dark_gray),),
+                                    ),
+                                  )
                                 ))
                           ],
                         ),
@@ -375,31 +490,67 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
                           children: <Widget>[
                             new Expanded(
                                 flex: 1,
-                                child: new Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(width: 1,color: ColorStyle().color_gray),
-                                      borderRadius: BorderRadius.all(Radius.circular(5))
-                                  ),
-                                  height: 50,
-                                  margin: EdgeInsets.only(left: 5,right: 5),
-                                  child: new Center(
-                                    child: new Text('11:00 am - 11:30 am',
-                                      style: new TextStyle(fontSize: 14),),
-                                  ),
+                                child: new GestureDetector(
+                                  onTap: (){
+                                    setState(() {
+                                      slot1=false;
+                                      slot2=false;
+                                      slot3=true;
+                                      slot4=false;
+                                      slot5=false;
+                                      slot6=false;
+                                      slot7=false;
+                                      slot8=false;
+                                      slot9=false;
+                                      // schedule_date='';
+                                      // schedule_date=schedule_date+'|'+'11:00 am - 11:30 am';
+                                    });
+                                  },
+                                  child: new Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(width: 1,color: ColorStyle().color_gray),
+                                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                                        color: slot3?ColorStyle().color_red:ColorStyle().color_white
+                                    ),
+                                    height: 50,
+                                    margin: EdgeInsets.only(left: 5,right: 5),
+                                    child: new Center(
+                                      child: new Text('11:00 am - 11:30 am',
+                                        style: new TextStyle(fontSize: 14,color: slot3?ColorStyle().color_white:ColorStyle().color_dark_gray),),
+                                    ),
+                                  )
                                 )),
                             new Expanded(
                                 flex: 1,
-                                child: new Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(width: 1,color: ColorStyle().color_gray),
-                                      borderRadius: BorderRadius.all(Radius.circular(5))
-                                  ),
-                                  height: 50,
-                                  margin: EdgeInsets.only(left: 5,right: 5),
-                                  child: new Center(
-                                    child: new Text('01:00 pm - 01:30 pm',
-                                      style: new TextStyle(fontSize: 14),),
-                                  ),
+                                child: new GestureDetector(
+                                  onTap: (){
+                                    setState(() {
+                                      slot1=false;
+                                      slot2=false;
+                                      slot3=false;
+                                      slot4=true;
+                                      slot5=false;
+                                      slot6=false;
+                                      slot7=false;
+                                      slot8=false;
+                                      slot9=false;
+                                      // schedule_date='';
+                                      // schedule_date=schedule_date+'|'+'01:00 pm - 01:30 pm';
+                                    });
+                                  },
+                                  child: new Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(width: 1,color: ColorStyle().color_gray),
+                                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                                        color: slot4?ColorStyle().color_red:ColorStyle().color_white
+                                    ),
+                                    height: 50,
+                                    margin: EdgeInsets.only(left: 5,right: 5),
+                                    child: new Center(
+                                      child: new Text('01:00 pm - 01:30 pm',
+                                        style: new TextStyle(fontSize: 14,color: slot4?ColorStyle().color_white:ColorStyle().color_dark_gray),),
+                                    ),
+                                  )
                                 ))
                           ],
                         ),
@@ -408,31 +559,67 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
                           children: <Widget>[
                             new Expanded(
                                 flex: 1,
-                                child: new Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(width: 1,color: ColorStyle().color_gray),
-                                      borderRadius: BorderRadius.all(Radius.circular(5))
-                                  ),
-                                  height: 50,
-                                  margin: EdgeInsets.only(left: 5,right: 5),
-                                  child: new Center(
-                                    child: new Text('02:00 pm - 02:30 pm',
-                                      style: new TextStyle(fontSize: 14),),
-                                  ),
+                                child: new GestureDetector(
+                                  onTap: (){
+                                    setState(() {
+                                      slot1=false;
+                                      slot2=false;
+                                      slot3=false;
+                                      slot4=false;
+                                      slot5=true;
+                                      slot6=false;
+                                      slot7=false;
+                                      slot8=false;
+                                      slot9=false;
+                                      // schedule_date='';
+                                      // schedule_date=schedule_date+'|'+'02:00 pm - 02:30 pm';
+                                    });
+                                  },
+                                  child: new Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(width: 1,color: ColorStyle().color_gray),
+                                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                                        color: slot5?ColorStyle().color_red:ColorStyle().color_white
+                                    ),
+                                    height: 50,
+                                    margin: EdgeInsets.only(left: 5,right: 5),
+                                    child: new Center(
+                                      child: new Text('02:00 pm - 02:30 pm',
+                                        style: new TextStyle(fontSize: 14,color: slot5?ColorStyle().color_white:ColorStyle().color_dark_gray),),
+                                    ),
+                                  )
                                 )),
                             new Expanded(
                                 flex: 1,
-                                child: new Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(width: 1,color: ColorStyle().color_gray),
-                                      borderRadius: BorderRadius.all(Radius.circular(5))
-                                  ),
-                                  height: 50,
-                                  margin: EdgeInsets.only(left: 5,right: 5),
-                                  child: new Center(
-                                    child: new Text('03:00 pm - 03:30 pm',
-                                      style: new TextStyle(fontSize: 14),),
-                                  ),
+                                child: new GestureDetector(
+                                  onTap: (){
+                                    setState(() {
+                                      slot1=false;
+                                      slot2=false;
+                                      slot3=false;
+                                      slot4=false;
+                                      slot5=false;
+                                      slot6=true;
+                                      slot7=false;
+                                      slot8=false;
+                                      slot9=false;
+                                      // schedule_date='';
+                                      // schedule_date=schedule_date+'|'+'03:00 pm - 03:30 pm';
+                                    });
+                                  },
+                                  child: new Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(width: 1,color: ColorStyle().color_gray),
+                                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                                        color: slot6?ColorStyle().color_red:ColorStyle().color_white
+                                    ),
+                                    height: 50,
+                                    margin: EdgeInsets.only(left: 5,right: 5),
+                                    child: new Center(
+                                      child: new Text('03:00 pm - 03:30 pm',
+                                        style: new TextStyle(fontSize: 14,color: slot6?ColorStyle().color_white:ColorStyle().color_dark_gray),),
+                                    ),
+                                  )
                                 ))
                           ],
                         ),
@@ -441,49 +628,103 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
                           children: <Widget>[
                             new Expanded(
                                 flex: 1,
-                                child: new Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(width: 1,color: ColorStyle().color_gray),
-                                      borderRadius: BorderRadius.all(Radius.circular(5))
-                                  ),
-                                  height: 50,
-                                  margin: EdgeInsets.only(left: 5,right: 5),
-                                  child: new Center(
-                                    child: new Text('04:00 pm - 04:30 pm',
-                                      style: new TextStyle(fontSize: 14),),
-                                  ),
+                                child: new GestureDetector(
+                                  onTap: (){
+                                    setState(() {
+                                      slot1=false;
+                                      slot2=false;
+                                      slot3=false;
+                                      slot4=false;
+                                      slot5=false;
+                                      slot6=false;
+                                      slot7=true;
+                                      slot8=false;
+                                      slot9=false;
+                                      // schedule_date='';
+                                      // schedule_date=schedule_date+'|'+'04:00 pm - 04:30 pm';
+                                    });
+                                  },
+                                  child: new Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(width: 1,color: ColorStyle().color_gray),
+                                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                                        color: slot7?ColorStyle().color_red:ColorStyle().color_white
+                                    ),
+                                    height: 50,
+                                    margin: EdgeInsets.only(left: 5,right: 5),
+                                    child: new Center(
+                                      child: new Text('04:00 pm - 04:30 pm',
+                                        style: new TextStyle(fontSize: 14,color: slot7?ColorStyle().color_white:ColorStyle().color_dark_gray),),
+                                    ),
+                                  )
                                 )),
                             new Expanded(
                                 flex: 1,
-                                child: new Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(width: 1,color: ColorStyle().color_gray),
-                                      borderRadius: BorderRadius.all(Radius.circular(5))
-                                  ),
-                                  height: 50,
-                                  margin: EdgeInsets.only(left: 5,right: 5),
-                                  child: new Center(
-                                    child: new Text('05:00 pm - 05:30 pm',
-                                      style: new TextStyle(fontSize: 14),),
-                                  ),
+                                child: new GestureDetector(
+                                  onTap: (){
+                                    setState(() {
+                                      slot1=false;
+                                      slot2=false;
+                                      slot3=false;
+                                      slot4=false;
+                                      slot5=false;
+                                      slot6=false;
+                                      slot7=false;
+                                      slot8=true;
+                                      slot9=false;
+                                      // schedule_date='';
+                                      // schedule_date=schedule_date+'|'+'05:00 pm - 05:30 pm';
+                                    });
+                                  },
+                                  child: new Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(width: 1,color: ColorStyle().color_gray),
+                                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                                        color: slot8?ColorStyle().color_red:ColorStyle().color_white
+                                    ),
+                                    height: 50,
+                                    margin: EdgeInsets.only(left: 5,right: 5),
+                                    child: new Center(
+                                      child: new Text('05:00 pm - 05:30 pm',
+                                        style: new TextStyle(fontSize: 14, color: slot8?ColorStyle().color_white:ColorStyle().color_dark_gray),),
+                                    ),
+                                  )
                                 ))
                           ],
                         ),
                         new Padding(padding: EdgeInsets.only(top: 8)),
                         new Row(
                           children: <Widget>[
-                            new Container(
-                              width: MediaQuery.of(context).size.width/2.3,
-                              decoration: BoxDecoration(
-                                  border: Border.all(width: 1,color: ColorStyle().color_gray),
-                                  borderRadius: BorderRadius.all(Radius.circular(5))
-                              ),
-                              height: 50,
-                              margin: EdgeInsets.only(left: 5,right: 5),
-                              child: new Center(
-                                child: new Text('06:00 pm - 06:30 pm',
-                                  style: new TextStyle(fontSize: 14),),
-                              ),
+                            new GestureDetector(
+                              onTap: (){
+                                setState(() {
+                                  slot1=false;
+                                  slot2=false;
+                                  slot3=false;
+                                  slot4=false;
+                                  slot5=false;
+                                  slot6=false;
+                                  slot7=false;
+                                  slot8=false;
+                                  slot9=true;
+                                  // schedule_date='';
+                                  // schedule_date=schedule_date+'|'+'06:00 pm - 06:30 pm';
+                                });
+                              },
+                              child: new Container(
+                                width: MediaQuery.of(context).size.width/2.3,
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 1,color: ColorStyle().color_gray),
+                                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                                    color: slot9?ColorStyle().color_red:ColorStyle().color_white
+                                ),
+                                height: 50,
+                                margin: EdgeInsets.only(left: 5,right: 5),
+                                child: new Center(
+                                  child: new Text('06:00 pm - 06:30 pm',
+                                    style: new TextStyle(fontSize: 14,color: slot9?ColorStyle().color_white:ColorStyle().color_dark_gray),),
+                                ),
+                              )
                             )
 
                           ],
@@ -521,13 +762,13 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
   @override
   void onInserorderError(String errorTxt) {
     // TODO: implement onInserorderError
-    _onLoading(true);
+    _onLoading(false);
   }
 
   @override
   void onInserorderSuccess(AddToCart response) {
     // TODO: implement onInserorderSuccess
-    _onLoading(true);
+    _onLoading(false);
     if(response.value!=null){
       Fluttertoast.showToast(
           msg: "Order placed successfully",

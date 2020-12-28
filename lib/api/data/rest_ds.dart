@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:beinglearners/api/utils/network_util.dart';
 import 'package:beinglearners/model/add_to_cart.dart';
 import 'package:beinglearners/model/category.dart';
+import 'package:beinglearners/model/get_all_order.dart';
 import 'package:beinglearners/model/getcart.dart';
 import 'package:beinglearners/model/product.dart';
 import 'package:beinglearners/model/slider.dart';
@@ -97,6 +98,16 @@ class RestDataSource {
     };
     return _netUtil.post(BASE_URL+'/api/Account/InsertOrder', headers: headers,body: query).then((dynamic res) {
       return new AddToCart.fromJson(res);
+    });
+  }
+
+  Future<AllOrderData> getAllOrder(String token,String oderID) {
+    Map<String, String> headers = {
+      "Authorization": 'Bearer '+token,
+    };
+
+    return _netUtil.post(BASE_URL+'/api/Account/GetOrdersByOrderID?OrderID='+oderID,headers: headers).then((dynamic res) {
+      return new AllOrderData.fromJson(res);
     });
   }
 }
