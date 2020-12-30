@@ -19,7 +19,6 @@ int sub_cate_listSize = 0 ;
 int product_listSize = 0 ;
 String click_id='';
 int product_count=0;
-bool card_visivility = true;
 int total_amount=0;
 int total_item=0;
 int total_time=0;
@@ -39,6 +38,7 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
   _ProductScreenState() {
     _presenter = new ProductScreenPresenter(this);
   }
+  bool card_visivility = true;
 
   sharepref() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -168,7 +168,7 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
                     children: <Widget>[
                      new GestureDetector(
                        onTap: (){
-                         if(add_to_cart_count==0){
+                         if(total_item==0){
 
                          }else{
                            Navigator.push(context, PageTransition(type:PageTransitionType.custom, duration: Duration(seconds: 0), child: CheckoutSummaryScreen()));
@@ -181,7 +181,7 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
                          width: 150,
                          decoration: BoxDecoration(
                              borderRadius: BorderRadius.all(Radius.circular(6)),
-                             color: add_to_cart_count==0?ColorStyle().color_gray_light:Colors.green
+                             color: total_item==0?ColorStyle().color_gray_light:Colors.green
                          ),
                          child: new Center(
                            child: new Text('Checkout',
@@ -545,6 +545,7 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
   void onProductError(String message) {
     loadingStatus= false;
     // TODO: implement onProductError
+
   }
 
   @override
@@ -556,6 +557,7 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
       product_listSize =product_List.length;
     });
     _presenter.getCart(TOKEN);
+
   }
 
   @override
@@ -564,6 +566,7 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
     loadingStatus=false;
    setState(() {
      product_listSize=0;
+     _presenter.getCart(TOKEN);
    });
   }
 

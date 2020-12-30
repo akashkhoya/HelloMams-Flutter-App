@@ -46,6 +46,12 @@ class RestDataSource {
     });
   }
 
+  Future<ProductData> getTrendingProducts() {
+    return _netUtil.get(BASE_URL+'/api/Account/GetTrendingProducts').then((dynamic res) {
+      return new ProductData.fromJson(res);
+    });
+  }
+
 
   Future<SubCategoryData> subCategory(String cateId) {
 
@@ -106,7 +112,7 @@ class RestDataSource {
       "Authorization": 'Bearer '+token,
     };
 
-    return _netUtil.post(BASE_URL+'/api/Account/GetOrdersByOrderID?OrderID='+oderID,headers: headers).then((dynamic res) {
+    return _netUtil.get(BASE_URL+'/api/Account/GetAllMyOrders',headers: headers).then((dynamic res) {
       return new AllOrderData.fromJson(res);
     });
   }

@@ -5,6 +5,7 @@ import 'package:beinglearners/common/constant.dart';
 import 'package:beinglearners/common/shared_preferences.dart';
 import 'package:beinglearners/model/category.dart';
 import 'package:beinglearners/model/get_all_order.dart';
+import 'package:beinglearners/model/product.dart';
 import 'package:beinglearners/model/slider.dart';
 import 'package:beinglearners/screens/all_order/all_order.dart';
 import 'package:beinglearners/screens/edit_profile/edit_profile.dart';
@@ -24,6 +25,7 @@ bool cateLoadingStatus =true;
 
 List<Value> slider_List ;
 List<ListData> category_List ;
+List<ProductDataList> trending_product_List ;
 bool appBarStatus =true;
 int bgColor =0;
 int _current = 0;
@@ -53,14 +55,23 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
   }
 
   void getprofile() async{
-    status=await new SharedPreferencesClass().getloginstatus();
+    status= await new SharedPreferencesClass().getloginstatus();
     _email=await new SharedPreferencesClass().getEmail();
     name=await new SharedPreferencesClass().getName();
   }
+
+  sharepreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      name= prefs.getString('name');
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    sharepreference();
     appBarStatus =true;
     getprofile();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -68,6 +79,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
       statusBarBrightness: Brightness.dark,
       statusBarColor: Colors.black,
     ));
+    trending_product_List= new List();
     setState(() {
       loadingStatus =true;
       cateLoadingStatus =true;
@@ -97,8 +109,9 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                 new Padding(padding: EdgeInsets.only(top: 15)),
                 new Container(
                   child: new Center(
-                    child: new Text('Welcome',
-                    style: new TextStyle(fontSize: 16),),
+                    child: new Text('Welcome '+name,
+                    style: new TextStyle(fontSize: 14,
+                    fontWeight: FontWeight.bold,color: ColorStyle().color_dark_gray),),
                   ),
                 ),
                 new Padding(padding: EdgeInsets.only(top: 15)),
@@ -590,7 +603,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
             new Container(
               height: 170,
               child: new ListView.builder(
-                  itemCount: slider_listSize,
+                  itemCount: trending_product_List.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context,index){
                     return  new Stack(
@@ -621,10 +634,29 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                             child: new Column(
                               children: <Widget>[
                                 new Expanded(
-                                    flex: 6,
+                                    flex: 3,
                                     child: new Container()),
                                 new Expanded(
                                     flex: 2,
+                                    child: new Row(
+                                      children: <Widget>[
+                                        new Container(
+                                          width: 80,
+                                          padding: EdgeInsets.only(left: 5,top: 4,bottom: 4),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(topRight: Radius.circular(3),bottomRight: Radius.circular(3)),
+                                            color: Colors.black12,
+                                          ),
+                                          child: new Text('View Offer',
+                                          style: new TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 12),),
+                                        )
+                                      ],
+                                    )),
+                                new Expanded(
+                                    flex: 4,
+                                    child: new Container()),
+                                new Expanded(
+                                    flex: 3,
                                     child: new Container(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.only(bottomLeft: Radius.circular(13),bottomRight: Radius.circular(13)),
@@ -635,9 +667,10 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                                           new Expanded(
                                               flex: 5,
                                               child: new Container(
+                                                padding: EdgeInsets.only(left: 3),
                                                 child: new Center(
-                                                  child: new Text('Body Massage',
-                                                    style: new TextStyle(color: ColorStyle().color_white,fontSize: 12),),
+                                                  child: new Text(trending_product_List[index].productKeywords,
+                                                    style: new TextStyle(color: ColorStyle().color_white,fontSize: 11),),
                                                 ),
                                               )),
                                           new Expanded(
@@ -948,11 +981,26 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
   @override
   void onCategorySuccess(CategoryData response) {
     // TODO: implement onCategorySuccess
-    loadingStatus=false;
     setState(() {
       category_List =response.categoryList;
       category_listSize =category_List.length;
+      _presenter.getTrendingProduct();
     });
+  }
+
+  @override
+  void onTrendingProductError(String errorTxt) {
+    // TODO: implement onTrendingProductError
+    loadingStatus=false;
+  }
+
+  @override
+  void onTrendingProductSuccess(ProductData response) {
+    // TODO: implement onTrendingProductSuccess
+    loadingStatus=false;
+   setState(() {
+     trending_product_List =response.productList;
+   });
   }
 
 }

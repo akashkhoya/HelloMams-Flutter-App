@@ -19,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 String _loginId, _loginPassword;
 String  _emailError, _mobileError, _passwordError,name,joinedat,username,token;
 bool password_obscureText = true;
+String full_name='';
 class LoginPage extends StatefulWidget {
   static String tag = 'login-page';
   @override
@@ -141,7 +142,7 @@ class _LoginPageState extends State<LoginPage> implements LoginScreenContract {
         context: context,
         builder: (BuildContext context) {
           return Padding(
-            padding: new EdgeInsets.only(top: MediaQuery.of(context).size.height/4,bottom: MediaQuery.of(context).size.height/4),
+            padding: new EdgeInsets.only(top: MediaQuery.of(context).size.height/3.5,bottom: MediaQuery.of(context).size.height/3.5),
             child: AlertDialog(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
               content:  new Container(
@@ -250,10 +251,11 @@ class _LoginPageState extends State<LoginPage> implements LoginScreenContract {
     );
   }
 
-  sharepref(bool data,String token) async {
+  sharepref(bool data,String token,String name) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('login_status', data);
     prefs.setString('token', token);
+    prefs.setString('name', name);
   }
 
   void _openPage(){
@@ -496,9 +498,10 @@ class _LoginPageState extends State<LoginPage> implements LoginScreenContract {
     if(response.statusCode== 200){
       setState(() {
         TOKEN =response.value.valueData.access_token;
+        full_name =response.value.valueData.fullName;
       });
       new SharedPreferencesClass().setloginstatus('true');
-      sharepref(true,TOKEN);
+      sharepref(true,TOKEN,full_name);
       _openPage();
     }else{
       dialogs('');

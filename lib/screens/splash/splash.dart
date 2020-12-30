@@ -21,7 +21,14 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   List<Slide> slides = new List();
-  @override
+
+
+  void getstatus()async{
+    Timer(
+        Duration(seconds: 3), () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => HomeScreen())));
+
+  }
 
   @override
   void initState() {
@@ -58,6 +65,10 @@ class _SplashScreenState extends State<SplashScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       loginstatus= prefs.getBool('login_status');
+      if(loginstatus==true){
+        getstatus();
+      }
+
     });
   }
 
@@ -99,7 +110,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return new IntroSlider(
+    return loginstatus?
+    new Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: new Image.asset('images/splash.jpeg',fit: BoxFit.fill,)
+    )
+    :new IntroSlider(
       // List slides
       slides: this.slides,
 
@@ -131,8 +148,6 @@ class SingleSplash extends StatefulWidget {
 }
 
 class _SingleSplashState extends State<SingleSplash> {
-
-
 
   @override
   Widget build(BuildContext context) {

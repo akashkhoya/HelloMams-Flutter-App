@@ -3,9 +3,11 @@ import 'package:beinglearners/common/colors.dart';
 import 'package:beinglearners/common/constant.dart';
 import 'package:beinglearners/model/add_to_cart.dart';
 import 'package:beinglearners/model/getcart.dart';
+import 'package:beinglearners/screens/login_screen/login_screen.dart';
 import 'package:beinglearners/screens/order_place_screen/order_place_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_page_transition/flutter_page_transition.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'checkout_summary_screen_presenter.dart';
@@ -38,8 +40,61 @@ class _CheckoutSummaryScreenState extends State<CheckoutSummaryScreen> implement
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
        token= prefs.getString('token');
+       _onLoading(true);
        _presenter.getCart(token);
     });
+  }
+
+  void _onLoading(bool status) {
+    if(status) {
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return Padding(
+            padding: new EdgeInsets.only(top: MediaQuery.of(context).size.height/3.5,bottom: MediaQuery.of(context).size.height/3.5),
+            child: AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+              content:  new Container(
+                  child: new Center(
+                      child: new Column(
+                        children: <Widget>[
+                          Container(
+                            height: 120,
+                            child: new Image.asset('images/logo.jpeg',),
+                          ),
+                          new Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              new Container(
+                                  padding: EdgeInsets.only(top: 10),
+                                  width:200,
+                                  child: new Center(
+                                    child: new Text('Please wait loading...',
+                                      style: new TextStyle(color: new ColorStyle().color_royal_blue,fontSize: 17,fontWeight: FontWeight.bold),),
+                                  )
+                              )
+                            ],
+                          ),
+                          new Padding(padding: EdgeInsets.only(top: 10)),
+                          new Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              new Image(image: new AssetImage('images/loader.gif',),width: 100,height: 40,)
+
+                            ],
+                          )
+                        ],
+                      )
+                  )
+              ),
+            ),
+          );
+        },
+      );
+    }
+    else
+      Navigator.pop(context);
   }
 
   @override
@@ -137,7 +192,7 @@ class _CheckoutSummaryScreenState extends State<CheckoutSummaryScreen> implement
     return get_cart_listSize==0?
         new Container(
           child: new Center(
-            child: new Text('Data not found'),
+            child: new Image.asset('images/cartempty.png',width: 150,height: 150,),
           ),
         )
         :new Container(
@@ -215,6 +270,7 @@ class _CheckoutSummaryScreenState extends State<CheckoutSummaryScreen> implement
                             child: new GestureDetector(
                               onTap: (){
                                 cart_id=get_cart_List[index].id;
+                                _onLoading(true);
                                 _presenter.getDelete(token,get_cart_List[index].id);
                               },
                               child: new Container(
@@ -235,15 +291,38 @@ class _CheckoutSummaryScreenState extends State<CheckoutSummaryScreen> implement
     );
   }
 
+  void logout(){
+    shareprefe('false');
+    Navigator.pushReplacement(context, PageTransition(type:PageTransitionType.custom, duration: Duration(seconds: 0), child: LoginPage()));
+  }
+
+  shareprefe(String data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('login_status', data);
+  }
+
 
   @override
   void onGetCartError(String errorTxt) {
     // TODO: implement onGetCartError
+    _onLoading(false);
+    print(errorTxt);
+   /* Fluttertoast.showToast(
+        msg: "Your session has been expire",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
+    logout();*/
   }
 
   @override
   void onGetCartSuccess(GetCartData response) {
     // TODO: implement onGetCartSuccess
+    _onLoading(false);
     setState(() {
       get_cart_List =response.getCartList;
       get_cart_listSize =get_cart_List.length;
@@ -259,11 +338,14 @@ class _CheckoutSummaryScreenState extends State<CheckoutSummaryScreen> implement
   @override
   void onDeleteCartError(String errorTxt) {
     // TODO: implement onDeleteCartError
+    _onLoading(false);
+
   }
 
   @override
   void onDeleteCartSuccess(AddToCart response) {
     // TODO: implement onDeleteCartSuccess
+    _onLoading(false);
     setState(() {
       get_cart_List.removeWhere((item) => item.id == cart_id);
       get_cart_listSize =get_cart_List.length;
@@ -272,6 +354,7 @@ class _CheckoutSummaryScreenState extends State<CheckoutSummaryScreen> implement
       for(int i=0;i<get_cart_List.length;i++){
         payable_amount += get_cart_List[i].totalAmount;
       }
+
     });
   }
 }

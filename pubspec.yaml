@@ -29,7 +29,7 @@ dependencies:
   connectivity: ^0.4.4
   animated_text_kit: ^2.5.4
   date_format: ^1.0.4
-  intl: ^0.16.0
+#  intl: ^0.16.0
   fluttertoast: ^7.1.6
   calendar_timeline: ^0.7.0
 
@@ -90,6 +90,8 @@ flutter:
     - images/women_service.png
     - images/internet_conne.png
     - images/splash.jpeg
+    - images/loader1.gif
+    - images/cartempty.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -12,10 +12,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_page_transition/flutter_page_transition.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
+import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/intl_browser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'order_place_screen_presenter.dart';
 import 'package:geolocator/geolocator.dart';
+
 
 List<GetCartList> get_cart_List ;
 bool loadingStatus =true;
@@ -62,43 +65,10 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
   Position _currentPosition;
-  String _currentAddress ='Current Address';
+  String _currentAddress ='';
   TextEditingController address_controller;
 
-  DateTime _selectedDate = new DateTime.now(),
-      _firstDate = new DateTime.now().subtract(new Duration(days: 2500));
 
-  _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: _selectedDate,
-        firstDate: _firstDate,
-        lastDate: _selectedDate.add(new Duration(days: 0))
-    );
-    if(picked != null && picked != _selectedDate) {
-      setState(() {
-        _selectedDate = picked;
-        order_date =new DateFormat('yyyy-MM-dd').format(picked);
-      });
-    }
-  }
-
-  custome_calendar(){
-    CalendarTimeline(
-      initialDate: DateTime(2020, 4, 20),
-      firstDate: DateTime(2019, 1, 15),
-      lastDate: DateTime(2020, 11, 20),
-      onDateSelected: (date) => print(date),
-      leftMargin: 20,
-      monthColor: Colors.blueGrey,
-      dayColor: Colors.teal[200],
-      activeDayColor: Colors.white,
-      activeBackgroundDayColor: Colors.redAccent[100],
-      dotsColor: Color(0xFF333A47),
-      selectableDayPredicate: (date) => date.day != 23,
-      locale: 'en_ISO',
-    );
-  }
 
   void _onLoading(bool status) {
     if(status) {
@@ -107,7 +77,7 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
         context: context,
         builder: (BuildContext context) {
           return Padding(
-            padding: new EdgeInsets.only(top: MediaQuery.of(context).size.height/4,bottom: MediaQuery.of(context).size.height/4),
+            padding: new EdgeInsets.only(top: MediaQuery.of(context).size.height/3.5,bottom: MediaQuery.of(context).size.height/3.5),
             child: AlertDialog(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
               content:  new Container(
@@ -122,7 +92,7 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               new Container(
-                                  padding: EdgeInsets.only(top: 0),
+                                  padding: EdgeInsets.only(top: 10),
                                   width:200,
                                   child: new Center(
                                     child: new Text('Please wait loading...',
@@ -158,7 +128,7 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
     _query = {
       "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
       "userID": widget.user_id,
-      "cartIDs": widget.cart_id,
+      "cartIDs": '1,2',
       "paymentGatewayID": "string",
       "paymentMethod": "Pay on Delivery",
       "transactionID": "string",
@@ -218,6 +188,16 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
     }
   }
 
+  getCurrentTime(){
+    setState(() {
+      DateTime now = DateTime.now();
+      day = int.parse(new DateFormat('dd').format(now));
+      month = int.parse(new DateFormat('MM').format(now));
+      year = int.parse(new DateFormat('yyyy').format(now));
+      schedule_date=now.toString();
+    });
+  }
+
 
   @override
   void initState() {
@@ -225,10 +205,8 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
     address_controller=new TextEditingController(text:_currentAddress);
     checkedValue =false;
     _getCurrentLocation();
-    DateTime now = DateTime.now();
-    day = int.parse(new DateFormat('dd').format(now));
-    month = int.parse(new DateFormat('MM').format(now));
-    year = int.parse(new DateFormat('yyyy').format(now));
+    getCurrentTime();
+
 setState(() {
   slot1=true;
   slot2=false;
@@ -239,7 +217,6 @@ setState(() {
   slot7=false;
   slot8=false;
   slot9=false;
-  schedule_date=now.toString();
   // schedule_date=now.toString()+'|'+'09:00 am - 09:30 am';
 });
 
@@ -321,6 +298,10 @@ setState(() {
                         padding: EdgeInsets.all(10),
                         child: new TextField(
                           controller: address_controller,
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Enter Current Address'
+                          ),
                           onChanged: (value){
                             address =value;
                           },
@@ -348,7 +329,6 @@ setState(() {
                     child: new Row(
                       children: <Widget>[
                         new Expanded(
-
                             child: new Column(
                               children: <Widget>[
                                 new Container(
@@ -370,37 +350,6 @@ setState(() {
                                     locale: 'en_ISO',
                                   )
                                 )
-                                /*new Container(
-                                  width: double.infinity,
-                                  child: new Column(
-                                    children: <Widget>[
-                                      new GestureDetector(
-                                          onTap: (){
-                                            _selectDate(context);
-                                            order_date = new DateFormat('dd-MMM-yyyy').format(_selectedDate);
-                                          },
-                                          child: new Row(
-                                            children: <Widget>[
-                                              new Container(
-                                                height: 35,
-                                                width: MediaQuery.of(context).size.width/2.2,
-                                                padding: const EdgeInsets.only(top: 10,left: 10),
-                                                decoration: new BoxDecoration(
-
-                                                ),
-                                                child: new Text(order_date,
-//                                      child: new Text(new DateFormat('dd-MMM-yyyy').format(_selectedDate),
-                                                  style: new TextStyle(fontSize: 10.0,color: new ColorStyle().color_black),
-                                                  textScaleFactor: 1.4,
-
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                      ),
-                                    ],
-                                  ),
-                                ),*/
                               ],
                             )
                         ),
@@ -769,13 +718,24 @@ setState(() {
   void onInserorderSuccess(AddToCart response) {
     // TODO: implement onInserorderSuccess
     _onLoading(false);
-    if(response.value!=null){
+    if(response.value=="Error"){
+      Fluttertoast.showToast(
+          msg: "Order failed...",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+
+    }else{
       Fluttertoast.showToast(
           msg: "Order placed successfully",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.green[800],
           textColor: Colors.white,
           fontSize: 16.0
       );
