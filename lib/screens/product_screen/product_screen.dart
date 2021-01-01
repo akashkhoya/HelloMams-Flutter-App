@@ -12,13 +12,11 @@ import 'package:flutter_page_transition/flutter_page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 List<SubCateData> sub_cate_List ;
-List<ProductDataList> product_List ;
 List<ProductDescriptions> product_description_List ;
 bool loadingStatus =true;
 int sub_cate_listSize = 0 ;
 int product_listSize = 0 ;
 String click_id='';
-int product_count=0;
 int total_amount=0;
 int total_item=0;
 int total_time=0;
@@ -29,6 +27,7 @@ class ProductScreen extends StatefulWidget {
   ProductScreen(this.category_name,this.category_id);
   @override
   _ProductScreenState createState() => _ProductScreenState();
+  static _ProductScreenState of(BuildContext context) => context.ancestorStateOfType(const TypeMatcher<_ProductScreenState>());
 }
 
 class _ProductScreenState extends State<ProductScreen> implements ProductScreenContract {
@@ -38,7 +37,6 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
   _ProductScreenState() {
     _presenter = new ProductScreenPresenter(this);
   }
-  bool card_visivility = true;
 
   sharepref() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -56,12 +54,10 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
      setState(() {
        sub_cate_listSize = 0 ;
        product_listSize = 0 ;
-       product_count=0;
        add_to_cart_count=0;
        total_item=0;
        total_time=0;
        total_amount=0;
-       card_visivility =true;
      });
     super.initState();
 
@@ -171,6 +167,7 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
                          if(total_item==0){
 
                          }else{
+                           // _presenter.getAddToCart(product_count.toString(),product_List[widget.position].id,TOKEN);
                            Navigator.push(context, PageTransition(type:PageTransitionType.custom, duration: Duration(seconds: 0), child: CheckoutSummaryScreen()));
                          }
 
@@ -287,235 +284,7 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
                     itemCount: product_List.length,
                     itemBuilder: (context,index){
                       // total_time=int.parse(product_List[index].minimumServiceTime);
-                      return new Container(
-                        margin: EdgeInsets.only(left: 6,right: 6,top: 5),
-                        child: new Card(
-                            elevation: 12,
-                            child: new Column(
-                              children: <Widget>[
-                                new Container(
-                                  height: 200,
-                                  child: new Row(
-                                    children: <Widget>[
-                                      new Expanded(
-                                        flex: 1,
-                                        child: new Container(
-                                          child: new ClipRRect(
-                                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                                            child: new Image.network(RestDataSource.BASE_URL+product_List[index].productImg),
-                                          ),
-                                        ),
-                                      ),
-                                      new Expanded(
-                                        flex: 1,
-                                        child: new Container(
-                                          child: new Column(
-                                            children: <Widget>[
-                                              new Container(
-                                                padding: EdgeInsets.only(top: 10,left: 12),
-                                                child: new Text(product_List[index].productTitle,
-                                                style: new TextStyle(color: ColorStyle().color_black,fontWeight: FontWeight.bold,
-                                                fontSize: 16),),
-                                              ),
-                                              new Row(
-                                                children: <Widget>[
-                                                  new Container(
-                                                    padding: EdgeInsets.only(top: 10,left: 12),
-                                                    child: new Text('₹ '+product_List[index].productPrice+'/-',
-                                                      style: new TextStyle(color: Colors.green,
-                                                          fontSize: 18),),
-                                                  ),
-                                                  new Stack(
-                                                    children: <Widget>[
-                                                      new Container(
-                                                        padding: EdgeInsets.only(top: 10,left: 12),
-                                                        child: new Text('₹ '+product_List[index].productStandardPrice,
-                                                          style: new TextStyle(color: Colors.black,
-                                                              fontSize: 16),),
-                                                      ),
-                                                      new Container(
-                                                        margin: EdgeInsets.only(left:8,top: 20),
-                                                       height: 1,
-                                                        width: 60,
-                                                        color: ColorStyle().color_black,
-                                                      ),
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                              new Container(
-                                                padding: EdgeInsets.only(top: 10),
-                                                child: new Text('0% off',
-                                                  style: new TextStyle(color: ColorStyle().color_black,
-                                                      fontSize: 15),),
-                                              ),
-                                              new Row(
-                                                children: <Widget>[
-                                                  new Container(
-                                                    padding: EdgeInsets.only(top: 10,left: 15),
-                                                    child: new Text('L',
-                                                      style: new TextStyle(color: ColorStyle().color_black,
-                                                          fontSize: 15),),
-                                                  ),
-                                                  new Container(
-                                                    padding: EdgeInsets.only(top: 10,left: 15),
-                                                    child: new Text(product_List[index].minimumServiceTime,
-                                                      style: new TextStyle(color: ColorStyle().color_black,
-                                                          fontSize: 15),),
-                                                  ),
-                                                ],
-                                              ),
-                                              new Row(
-                                                children: <Widget>[
-                                                  card_visivility?new GestureDetector(
-                                                    onTap: (){
-                                                     setState(() {
-                                                       product_count=1;
-                                                       add_to_cart_count=1;
-                                                       total_item=1;
-                                                       total_amount=int.parse(product_List[index].productStandardPrice);
-                                                       card_visivility =false;
-
-                                                       String des =product_List[index].minimumServiceTime;
-                                                       var part = des.split('min');
-                                                       total_time =int.parse(part[0]);
-                                                       _presenter.getAddToCart(product_count.toString(),product_List[index].id,TOKEN);
-
-                                                     });
-                                                    },
-                                                    child: new Container(
-                                                      margin: EdgeInsets.only(top: 10),
-                                                      height: 30,
-                                                      width: 90,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.all(Radius.circular(6)),
-                                                          color: ColorStyle().color_red
-                                                      ),
-                                                      child: new Center(
-                                                          child: new Text('Add to cart',
-                                                          style: TextStyle(color: ColorStyle().color_white,fontWeight: FontWeight.bold),)
-                                                      ),
-                                                    ),
-                                                  ):
-                                                  new Row(
-                                                    children: <Widget>[
-                                                      new GestureDetector(
-                                                        onTap: (){
-                                                          setState(() {
-                                                            if(product_count>1){
-                                                              product_count--;
-                                                              add_to_cart_count=1;
-                                                              total_item=product_count;
-                                                              total_amount=int.parse(product_List[index].productStandardPrice)*product_count;
-                                                              total_time =total_time*product_count;
-                                                            }else{
-                                                              setState(() {
-                                                                add_to_cart_count=0;
-                                                                total_item=0;
-                                                                total_amount=0;
-                                                                total_time=0;
-                                                                card_visivility =true;
-                                                              });
-                                                            }
-
-                                                          });
-                                                        },
-                                                        child: new Container(
-                                                          margin: EdgeInsets.only(top: 10,left: 10),
-                                                          height: 25,
-                                                          width: 25,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.all(Radius.circular(50)),
-                                                              color: ColorStyle().color_red
-                                                          ),
-                                                          child: new Center(
-                                                              child: new Icon(Icons.remove,size: 22,color: ColorStyle().color_white,)
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      new GestureDetector(
-                                                        child: new Container(
-                                                          margin: EdgeInsets.only(top: 10),
-                                                          height: 30,
-                                                          width: 40,
-                                                          child: new Center(
-                                                            child: new Text(product_count.toString(),
-                                                              style: new TextStyle(color: ColorStyle().color_black,fontWeight: FontWeight.bold,fontSize: 18),),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      new GestureDetector(
-                                                        onTap: (){
-                                                          setState(() {
-                                                            product_count++;
-                                                            add_to_cart_count=1;
-                                                            total_item=product_count;
-                                                            total_amount=int.parse(product_List[index].productStandardPrice)*product_count;
-                                                            total_time =total_time*product_count;
-                                                            _presenter.getAddToCart(product_count.toString(),product_List[index].id,TOKEN);
-                                                          });
-                                                        },
-                                                        child: new Container(
-                                                          margin: EdgeInsets.only(top: 10),
-                                                          height: 25,
-                                                          width: 25,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.all(Radius.circular(50)),
-                                                              color: ColorStyle().color_red
-                                                          ),
-                                                          child: new Center(
-                                                              child: new Icon(Icons.add,size: 22,color: ColorStyle().color_white,)
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                product_List[index].productDescriptionsList.length==0?new Container(): new Container(
-                                  height: 90,
-                                  child: new ListView.builder(
-                                      itemCount: 1,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      itemBuilder: (context,pIndex){
-                                        String des =product_List[0].productDescriptionsList[pIndex].descriptions;
-                                        var parts = des.split('#');
-                                        return new Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            new Container(
-                                              padding: EdgeInsets.only(top: 5,left: 10),
-                                              child: new Text('● '+parts[0],
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,),
-                                            ),
-                                            new Container(
-                                              padding: EdgeInsets.only(top: 5,left: 10),
-                                              child: new Text( '● '+parts[1],
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,),
-                                            ),
-                                            new Container(
-                                              padding: EdgeInsets.only(top: 5,left: 10),
-                                              child: new Text( '● '+parts[2],
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,),
-                                            )
-                                          ],
-                                        );
-                                      }),
-                                )
-                              ],
-                            ),
-                        ),
-                      );
+                      return new ListItems(index);
                     })
             )
           )
@@ -597,5 +366,334 @@ class _ProductScreenState extends State<ProductScreen> implements ProductScreenC
    setState(() {
      add_to_cart_count =response.getCartList.length;
    });
+  }
+
+  @override
+  void onDeleteCartError(String errorTxt) {
+    // TODO: implement onDeleteCartError
+  }
+
+  @override
+  void onDeleteCartSuccess(AddToCart response) {
+    // TODO: implement onDeleteCartSuccess
+  }
+}
+
+class ListItems extends StatefulWidget {
+  int position;
+  ListItems(this.position);
+  @override
+  _ListItemsState createState() => _ListItemsState();
+  static _ListItemsState of(BuildContext context) => context.ancestorStateOfType(const TypeMatcher<_ListItemsState>());
+}
+
+class _ListItemsState extends State<ListItems> implements ProductScreenContract {
+
+  ProductScreenPresenter _presenter;
+
+  _ListItemsState() {
+    _presenter = new ProductScreenPresenter(this);
+  }
+
+  bool card_visivility = true;
+  int product_count=0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+      setState(() {
+        card_visivility =true;
+        product_count=0;
+      });
+    super.initState();
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+      margin: EdgeInsets.only(left: 6,right: 6,top: 5),
+      child: new Card(
+        elevation: 12,
+        child: new Column(
+          children: <Widget>[
+            new Container(
+              height: 200,
+              child: new Row(
+                children: <Widget>[
+                  new Expanded(
+                    flex: 1,
+                    child: new Container(
+                      child: new ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        child: new Image.network(RestDataSource.BASE_URL+product_List[widget.position].productImg),
+                      ),
+                    ),
+                  ),
+                  new Expanded(
+                    flex: 1,
+                    child: new Container(
+                      child: new Column(
+                        children: <Widget>[
+                          new Container(
+                            padding: EdgeInsets.only(top: 10,left: 12),
+                            child: new Text(product_List[widget.position].productTitle,
+                              style: new TextStyle(color: ColorStyle().color_black,fontWeight: FontWeight.bold,
+                                  fontSize: 16),),
+                          ),
+                          new Row(
+                            children: <Widget>[
+                              new Container(
+                                padding: EdgeInsets.only(top: 10,left: 12),
+                                child: new Text('₹ '+product_List[widget.position].productPrice+'/-',
+                                  style: new TextStyle(color: Colors.green,
+                                      fontSize: 18),),
+                              ),
+                              new Stack(
+                                children: <Widget>[
+                                  new Container(
+                                    padding: EdgeInsets.only(top: 10,left: 12),
+                                    child: new Text('₹ '+product_List[widget.position].productStandardPrice,
+                                      style: new TextStyle(color: Colors.black,
+                                          fontSize: 16),),
+                                  ),
+                                  new Container(
+                                    margin: EdgeInsets.only(left:8,top: 20),
+                                    height: 1,
+                                    width: 60,
+                                    color: ColorStyle().color_black,
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                          new Container(
+                            padding: EdgeInsets.only(top: 10),
+                            child: new Text('0% off',
+                              style: new TextStyle(color: ColorStyle().color_black,
+                                  fontSize: 15),),
+                          ),
+                          new Row(
+                            children: <Widget>[
+                              new Container(
+                                padding: EdgeInsets.only(top: 10,left: 15),
+                                child: new Text('L',
+                                  style: new TextStyle(color: ColorStyle().color_black,
+                                      fontSize: 15),),
+                              ),
+                              new Container(
+                                padding: EdgeInsets.only(top: 10,left: 15),
+                                child: new Text(product_List[widget.position].minimumServiceTime,
+                                  style: new TextStyle(color: ColorStyle().color_black,
+                                      fontSize: 15),),
+                              ),
+                            ],
+                          ),
+                          new Row(
+                            children: <Widget>[
+                              card_visivility?new GestureDetector(
+                                onTap: (){
+                                  ProductScreen.of(context).setState(() {
+                                    product_count=1;
+                                    // add_to_cart_count=0;
+                                    total_item=1;
+                                    total_amount=int.parse(product_List[widget.position].productStandardPrice);
+                                    card_visivility =false;
+
+                                    String des =product_List[widget.position].minimumServiceTime;
+                                    var part = des.split('min');
+                                    total_time =int.parse(part[0]);
+                                    _presenter.getAddToCart(product_count.toString(),product_List[widget.position].id,TOKEN);
+                                  });
+                                },
+                                child: new Container(
+                                  margin: EdgeInsets.only(top: 10),
+                                  height: 30,
+                                  width: 90,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(6)),
+                                      color: ColorStyle().color_red
+                                  ),
+                                  child: new Center(
+                                      child: new Text('Add to cart',
+                                        style: TextStyle(color: ColorStyle().color_white,fontWeight: FontWeight.bold),)
+                                  ),
+                                ),
+                              ):
+                              new Row(
+                                children: <Widget>[
+                                  new GestureDetector(
+                                    onTap: (){
+                                      ProductScreen.of(context).setState(() {
+                                        if(product_count>1){
+                                          product_count--;
+                                          // add_to_cart_count=0;
+                                          total_item=product_count;
+                                          total_amount=int.parse(product_List[widget.position].productStandardPrice)*product_count;
+                                          total_time =total_time*product_count;
+                                          _presenter.getDelete(TOKEN,product_List[widget.position].id);
+                                        }else{
+                                          setState(() {
+                                            // add_to_cart_count=0;
+                                            total_item=0;
+                                            total_amount=0;
+                                            total_time=0;
+                                            card_visivility =true;
+                                          });
+                                        }
+                                      });
+                                    },
+                                    child: new Container(
+                                      margin: EdgeInsets.only(top: 10,left: 10),
+                                      height: 25,
+                                      width: 25,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                                          color: ColorStyle().color_red
+                                      ),
+                                      child: new Center(
+                                          child: new Icon(Icons.remove,size: 22,color: ColorStyle().color_white,)
+                                      ),
+                                    ),
+                                  ),
+                                  new GestureDetector(
+                                    child: new Container(
+                                      margin: EdgeInsets.only(top: 10),
+                                      height: 30,
+                                      width: 40,
+                                      child: new Center(
+                                        child: new Text(product_count.toString(),
+                                          style: new TextStyle(color: ColorStyle().color_black,fontWeight: FontWeight.bold,fontSize: 18),),
+                                      ),
+                                    ),
+                                  ),
+                                  new GestureDetector(
+                                    onTap: (){
+                                      ProductScreen.of(context).setState(() {
+                                        product_count++;
+                                        // add_to_cart_count=1;
+                                        total_item=product_count;
+                                        total_amount=int.parse(product_List[widget.position].productStandardPrice)*product_count;
+                                        total_time =total_time*product_count;
+                                        _presenter.getAddToCart(product_count.toString(),product_List[widget.position].id,TOKEN);
+                                      });
+                                    },
+                                    child: new Container(
+                                      margin: EdgeInsets.only(top: 10),
+                                      height: 25,
+                                      width: 25,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                                          color: ColorStyle().color_red
+                                      ),
+                                      child: new Center(
+                                          child: new Icon(Icons.add,size: 22,color: ColorStyle().color_white,)
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            product_List[widget.position].productDescriptionsList.length==0?new Container(): new Container(
+              height: 90,
+              child: new ListView.builder(
+                  itemCount: 1,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context,pIndex){
+                    String des =product_List[0].productDescriptionsList[pIndex].descriptions;
+                    var parts = des.split('#');
+                    return new Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        new Container(
+                          padding: EdgeInsets.only(top: 5,left: 10),
+                          child: new Text('● '+parts[0],
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,),
+                        ),
+                        new Container(
+                          padding: EdgeInsets.only(top: 5,left: 10),
+                          child: new Text( '● '+parts[1],
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,),
+                        ),
+                        new Container(
+                          padding: EdgeInsets.only(top: 5,left: 10),
+                          child: new Text( '● '+parts[2],
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,),
+                        )
+                      ],
+                    );
+                  }),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  void onAddToCartError(String errorTxt) {
+    // TODO: implement onAddToCartError
+  }
+
+  @override
+  void onAddToCartSuccess(AddToCart response) {
+    // TODO: implement onAddToCartSuccess
+    if(response.value!=null){
+      String message =response.value;
+      print(message);
+      // _presenter.getCart(TOKEN);
+
+    }
+  }
+
+  @override
+  void onGetCartError(String errorTxt) {
+    // TODO: implement onGetCartError
+  }
+
+  @override
+  void onGetCartSuccess(GetCartData response) {
+    // TODO: implement onGetCartSuccess
+  }
+
+  @override
+  void onProdctDataSuccess(ProductData response) {
+    // TODO: implement onProdctDataSuccess
+  }
+
+  @override
+  void onProdctSuccess(SubCategoryData response) {
+    // TODO: implement onProdctSuccess
+  }
+
+  @override
+  void onProductDataError(String errorTxt) {
+    // TODO: implement onProductDataError
+  }
+
+  @override
+  void onProductError(String errorTxt) {
+    // TODO: implement onProductError
+  }
+
+  @override
+  void onDeleteCartError(String errorTxt) {
+    // TODO: implement onDeleteCartError
+  }
+
+  @override
+  void onDeleteCartSuccess(AddToCart response) {
+    // TODO: implement onDeleteCartSuccess
   }
 }

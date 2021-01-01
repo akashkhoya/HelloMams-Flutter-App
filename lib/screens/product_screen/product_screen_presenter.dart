@@ -16,6 +16,8 @@ abstract class ProductScreenContract {
   void onAddToCartError(String errorTxt);
   void onGetCartSuccess(GetCartData response);
   void onGetCartError(String errorTxt);
+  void onDeleteCartSuccess(AddToCart response);
+  void onDeleteCartError(String errorTxt);
 
 }
 
@@ -47,5 +49,11 @@ class ProductScreenPresenter {
     api.getCart(token).then((GetCartData res) {
       _view.onGetCartSuccess(res);
     }).catchError((Object error) => _view.onGetCartError(error.toString()));
+  }
+
+  getDelete(String token,String cartID) {
+    api.getDeleteCart(token,cartID).then((AddToCart res) {
+      _view.onDeleteCartSuccess(res);
+    }).catchError((Object error) => _view.onDeleteCartError(error.toString()));
   }
 }

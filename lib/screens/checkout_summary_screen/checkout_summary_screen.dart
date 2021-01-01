@@ -5,6 +5,7 @@ import 'package:beinglearners/model/add_to_cart.dart';
 import 'package:beinglearners/model/getcart.dart';
 import 'package:beinglearners/screens/login_screen/login_screen.dart';
 import 'package:beinglearners/screens/order_place_screen/order_place_screen.dart';
+import 'package:beinglearners/screens/product_screen/product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_page_transition/flutter_page_transition.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -115,7 +116,14 @@ class _CheckoutSummaryScreenState extends State<CheckoutSummaryScreen> implement
         elevation: 0.0,
         backgroundColor: ColorStyle().color_red,
         title: new Text('Summary'),
+        leading: new GestureDetector(
+          onTap: (){
+           Navigator.pop(context);
+          },
+          child: new Icon(Icons.keyboard_backspace,color: Colors.white,),
+        ),
       ),
+
       body: widget_body(),
       bottomNavigationBar: new Container(
         height: 80,
@@ -157,10 +165,16 @@ class _CheckoutSummaryScreenState extends State<CheckoutSummaryScreen> implement
               flex: 1,
                 child: new GestureDetector(
                   onTap: (){
+                    if(get_cart_List.length==1){
+                      Navigator.push(context, PageTransition(type:PageTransitionType.custom, duration: Duration(seconds: 0), child: OrderPlaceScreen(
+                          get_cart_List[0].id,get_cart_List[0].userID,payable_amount
+                      )));
+                    }else if(get_cart_List.length==2){
+                      Navigator.push(context, PageTransition(type:PageTransitionType.custom, duration: Duration(seconds: 0), child: OrderPlaceScreen(
+                          (get_cart_List[0].id+','+get_cart_List[1].id+','),get_cart_List[0].userID,payable_amount
+                      )));
+                    }
 
-                    Navigator.push(context, PageTransition(type:PageTransitionType.custom, duration: Duration(seconds: 0), child: OrderPlaceScreen(
-                        get_cart_List[0].id,get_cart_List[0].userID,payable_amount
-                    )));
                   },
                   child: new Container(
                     child: new Column(
@@ -349,7 +363,6 @@ class _CheckoutSummaryScreenState extends State<CheckoutSummaryScreen> implement
     setState(() {
       get_cart_List.removeWhere((item) => item.id == cart_id);
       get_cart_listSize =get_cart_List.length;
-      add_to_cart_count = get_cart_List.length;
       payable_amount=0;
       for(int i=0;i<get_cart_List.length;i++){
         payable_amount += get_cart_List[i].totalAmount;

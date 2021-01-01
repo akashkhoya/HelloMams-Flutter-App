@@ -110,13 +110,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return loginstatus?
-    new Container(
+    /*return new Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: new Image.asset('images/splash.jpeg',fit: BoxFit.fill,)
-    )
-    :new IntroSlider(
+    );*/
+    return new IntroSlider(
       // List slides
       slides: this.slides,
 

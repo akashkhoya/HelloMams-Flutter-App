@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:beinglearners/api/data/rest_ds.dart';
 import 'package:beinglearners/common/colors.dart';
@@ -128,7 +129,7 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
     _query = {
       "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
       "userID": widget.user_id,
-      "cartIDs": '1,2',
+      "cartIDs": widget.cart_id,
       "paymentGatewayID": "string",
       "paymentMethod": "Pay on Delivery",
       "transactionID": "string",
@@ -202,6 +203,7 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
   @override
   void initState() {
     // TODO: implement initState
+    sharepref();
     address_controller=new TextEditingController(text:_currentAddress);
     checkedValue =false;
     _getCurrentLocation();
@@ -219,9 +221,22 @@ setState(() {
   slot9=false;
   // schedule_date=now.toString()+'|'+'09:00 am - 09:30 am';
 });
-
     super.initState();
 
+  }
+
+  sharepref() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+     String token= prefs.getString('token');
+      _onLoading(true);
+     loading_time();
+    });
+  }
+
+  loading_time(){
+    Timer(
+        Duration(seconds: 6), () => _onLoading(false));
   }
 
 
