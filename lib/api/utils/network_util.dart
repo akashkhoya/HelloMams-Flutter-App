@@ -16,7 +16,11 @@ class NetworkUtil {
       final int statusCode = response.statusCode;
 
       if (statusCode < 200 || statusCode > 400 || json == null) {
-        throw new Exception("Error while fetching data");
+        if(statusCode==401){
+          throw new Exception('401');
+        }else{
+          throw new Exception("Error while fetching data");
+        }
       }
       return _decoder.convert(res);
     });
@@ -31,7 +35,12 @@ class NetworkUtil {
 
           if (statusCode < 200 || statusCode > 400 || json == null) {
             print(statusCode);
-            throw new Exception("Error while fetching data");
+            if(statusCode==401){
+              throw new Exception('401');
+            }else{
+              throw new Exception("Error while fetching data");
+            }
+
           }
           return _decoder.convert(res);
     });

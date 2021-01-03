@@ -3,11 +3,13 @@ import 'package:beinglearners/api/data/rest_ds.dart';
 import 'package:beinglearners/common/colors.dart';
 import 'package:beinglearners/common/constant.dart';
 import 'package:beinglearners/common/shared_preferences.dart';
+import 'package:beinglearners/model/add_to_cart.dart';
 import 'package:beinglearners/model/category.dart';
 import 'package:beinglearners/model/get_all_order.dart';
 import 'package:beinglearners/model/product.dart';
 import 'package:beinglearners/model/slider.dart';
 import 'package:beinglearners/screens/all_order/all_order.dart';
+import 'package:beinglearners/screens/checkout_summary_screen/checkout_summary_screen.dart';
 import 'package:beinglearners/screens/edit_profile/edit_profile.dart';
 import 'package:beinglearners/screens/login_screen/login_screen.dart';
 import 'package:beinglearners/screens/product_screen/product_screen.dart';
@@ -64,7 +66,60 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       name= prefs.getString('name');
+      TOKEN =prefs.getString('token');
     });
+  }
+
+  void _onLoading(bool status) {
+    if(status) {
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return Padding(
+            padding: new EdgeInsets.only(top: MediaQuery.of(context).size.height/3.5,bottom: MediaQuery.of(context).size.height/3.5),
+            child: AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+              content:  new Container(
+                  child: new Center(
+                      child: new Column(
+                        children: <Widget>[
+                          Container(
+                            height: 120,
+                            child: new Image.asset('images/logo.jpeg',),
+                          ),
+                          new Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              new Container(
+                                  padding: EdgeInsets.only(top: 10),
+                                  width:200,
+                                  child: new Center(
+                                    child: new Text('Please wait loading...',
+                                      style: new TextStyle(color: new ColorStyle().color_royal_blue,fontSize: 17,fontWeight: FontWeight.bold),),
+                                  )
+                              )
+                            ],
+                          ),
+                          new Padding(padding: EdgeInsets.only(top: 10)),
+                          new Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              new Image(image: new AssetImage('images/loader.gif',),width: 100,height: 40,)
+
+                            ],
+                          )
+                        ],
+                      )
+                  )
+              ),
+            ),
+          );
+        },
+      );
+    }
+    else
+      Navigator.pop(context);
   }
 
   @override
@@ -142,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                         Navigator.push(context, PageTransition(type:PageTransitionType.custom, duration: Duration(seconds: 0), child: AllOrderScreen()));
                       },
                     ),
-                    ListTile(
+                  /*  ListTile(
                       title: Text("Edit Profile",
                         style: new TextStyle(color: new ColorStyle().color_black,fontSize: 16),),
                       leading: Icon(Icons.edit),
@@ -168,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                       onTap: (){
                         Navigator.pop(context);
                       },
-                    ),
+                    ),*/
                     status==null||status==false?new Container():ListTile(
                       title: Text("Logout",
                         style: new TextStyle(color: new ColorStyle().color_black,fontSize: 16),),
@@ -330,15 +385,19 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                     )
                 )
             ),
-            IconButton(
-              icon: Icon(Icons.search,
-                color: new ColorStyle().color_white,
-              ),
-              onPressed: () {
-                setState(() {
-                  appBarStatus =false;
-                });
-              },
+            new SizedBox(
+                height: 50,
+                child: new Container(
+                  margin: EdgeInsets.all(3),
+                  padding: EdgeInsets.all(5),
+                    height: 30,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(50)),
+                      color: Colors.white
+                    ),
+                    child: new Image.asset('images/logo.jpeg',)
+                )
             ),
           ],
         ),
@@ -449,43 +508,6 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                 }
                 ).toList(),
               ),
-              /*child: new ListView.builder(
-                  itemCount: slider_listSize,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context,index){
-                    return  new Stack(
-                      children: <Widget>[
-                        new Container(
-                          height: 200,
-                          width: MediaQuery.of(context).size.width/1.2,
-                          child: new Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              margin: EdgeInsets.all(10),
-                              elevation: 5,
-                              child: new ClipRRect(
-                                borderRadius: BorderRadius.circular(15.0),
-                                child: new Image.network(RestDataSource.BASE_URL+slider_List[index].sliderImg,fit: BoxFit.fill,),
-                              )
-                          ),
-                        ),
-                        new Container(
-                          width: MediaQuery.of(context).size.width/1.27,
-                          margin: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                            color: Colors.black54,
-                          ),
-
-                          child: new Center(
-                            child: new Text(slider_List[index].sliderName,
-                            style: new TextStyle(color: ColorStyle().color_white,fontWeight: FontWeight.bold,fontSize: 17),)
-                          ),
-                        )
-                      ],
-                    );
-                  }),*/
             ),
 
             new Container(
@@ -619,7 +641,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                               elevation: 5,
                               child: new ClipRRect(
                                 borderRadius: BorderRadius.circular(13.0),
-                                child: new Image.network(RestDataSource.BASE_URL+slider_List[index].sliderImg,fit: BoxFit.fill,),
+                                child: new Image.network(RestDataSource.BASE_URL+trending_product_List[index].productImg,fit: BoxFit.fill,),
                               )
                           ),
                         ),
@@ -675,17 +697,23 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                                               )),
                                           new Expanded(
                                               flex: 3,
-                                              child: new Container(
-                                                margin: EdgeInsets.only(right: 10),
-                                                height: 23,
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.all( Radius.circular(4)),
-                                                  color: ColorStyle().color_red,
-                                                ),
-                                                child: new Center(
-                                                  child: new Text('Know more',
-                                                    style: new TextStyle(color: ColorStyle().color_white,fontSize: 10),),
-                                                ),
+                                              child: new GestureDetector(
+                                                onTap: (){
+                                                  _onLoading(true);
+                                                  _presenter.getAddToCart('1',trending_product_List[index].id,TOKEN);
+                                                },
+                                                child: new Container(
+                                                  margin: EdgeInsets.only(right: 10),
+                                                  height: 23,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.all( Radius.circular(4)),
+                                                    color: ColorStyle().color_red,
+                                                  ),
+                                                  child: new Center(
+                                                    child: new Text('add to cart',
+                                                      style: new TextStyle(color: ColorStyle().color_white,fontSize: 10),),
+                                                  ),
+                                                )
                                               ))
                                         ],
                                       ),
@@ -697,7 +725,144 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                     );
                   }),
             ),
-            new Container(
+          new Container(
+            padding: EdgeInsets.only(top: 15,left: 10),
+            child: new Text('Customer Testimonials',
+            style: new TextStyle(color: Colors.pink,fontSize: 18,fontWeight: FontWeight.bold),),
+          ),
+          new Container(
+            child: new Card(
+              child: new Column(
+                children: <Widget>[
+                  new Row(
+                    children: <Widget>[
+                      new Container(
+                        padding: EdgeInsets.only(left: 10,top: 8),
+                        child: new Text('Shivani Gupta',
+                          style: new TextStyle(color: Colors.pink,fontSize: 15,fontWeight: FontWeight.bold),),
+                      )
+                    ],
+                  ),
+                  new Row(
+                    children: <Widget>[
+                      new Container(
+                        padding: EdgeInsets.only(left: 10,top: 4),
+                        child: new Text('●  Reviewed by Hello mams',
+                          style: new TextStyle(color: Colors.grey,fontSize: 13,fontWeight: FontWeight.bold),),
+                      )
+                    ],
+                  ),
+                  new Padding(padding: EdgeInsets.only(top: 10)),
+                  new Row(
+                    children: <Widget>[
+                      new Expanded(
+                        flex: 1,
+                          child: new Container(
+                            padding: EdgeInsets.only(left: 10,top: 4),
+                            child:new Center(
+                              child:  new Text('“',
+                                style: new TextStyle(color: Colors.pink,fontSize: 18,fontWeight: FontWeight.bold),),
+                            )
+                          )),
+                      new Expanded(
+                          flex: 4,
+                          child: new Container(
+                            padding: EdgeInsets.only(left: 10,top: 4),
+                            child: new Center(
+                              child: new Text('Very Good',
+                                style: new TextStyle(color: Colors.grey,fontSize: 16),),
+                            )
+                          )),
+                      new Expanded(
+                          flex: 1,
+                          child: new Container(
+                            padding: EdgeInsets.only(left: 10,top: 4),
+                            child: new Center(
+                              child: new Text('”',
+                                style: new TextStyle(color: Colors.pink,fontSize: 18,fontWeight: FontWeight.bold),),
+                            )
+                          ))
+                    ],
+                  ),
+                  new Container(
+                    height: 1,
+                    width: MediaQuery.of(context).size.width,
+                    color: Colors.grey,
+                    margin: EdgeInsets.only(top: 15,left: 15,right: 15),
+                  ),
+                  new Padding(padding: EdgeInsets.only(top: 5)),
+                  new Row(
+                    children: <Widget>[
+                      new Expanded(
+                          flex: 2,
+                          child: new Container(
+                            padding: EdgeInsets.only(left: 10,top: 4),
+                            child: new Text('PROFESSIONAL',
+                              style: new TextStyle(color: Colors.grey,fontSize: 14,fontWeight: FontWeight.bold),),
+                          )),
+                      new Expanded(
+                        flex: 1,
+                          child: new Container(
+                            padding: EdgeInsets.only(left: 10,top: 4),
+                            child: new Text('KOKILA',
+                              style: new TextStyle(color: Colors.pink,fontSize: 14,fontWeight: FontWeight.bold),),
+                          ))
+                    ],
+                  ),
+                  new Padding(padding: EdgeInsets.only(top: 5)),
+                  new Row(
+                    children: <Widget>[
+                      new Expanded(
+                          flex: 2,
+                          child: new Container(
+                            padding: EdgeInsets.only(left: 10,top: 4),
+                            child: new Text('',
+                              style: new TextStyle(color: Colors.grey,fontSize: 14,fontWeight: FontWeight.bold),),
+                          )),
+                      new Expanded(
+                          flex: 1,
+                          child: new Row(
+                            children: <Widget>[
+                              new Icon(
+                                Icons.star,
+                                size: 18.0,
+                                color: Colors.yellow[800],
+
+                              ),
+                              new Icon(
+                                Icons.star,
+                                size: 18.0,
+                                color: Colors.yellow[800],
+
+                              ),
+                              new Icon(
+                                Icons.star,
+                                size: 18.0,
+                                color: Colors.yellow[800],
+
+                              ),
+                              new Icon(
+                                Icons.star,
+                                size: 18.0,
+                                color: Colors.yellow[800],
+
+                              ),
+                              new Icon(
+                                Icons.star,
+                                size: 18.0,
+                                color: Colors.yellow[800],
+
+                              ),
+                            ],
+                          ))
+                    ],
+                  ),
+                  new Padding(padding: EdgeInsets.only(top: 15)),
+                ],
+              ),
+            ),
+          )
+          /*  new Container(
               padding: EdgeInsets.only(left: 12,top: 10,bottom: 8),
               child: new Text('Male Services',
               style: new TextStyle(color: ColorStyle().color_black,fontSize: 15,fontWeight: FontWeight.bold),),
@@ -949,7 +1114,7 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
                       ],
                     );
                   }),
-            )
+            )*/
           ],
         )
     );
@@ -1001,6 +1166,24 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenContract {
    setState(() {
      trending_product_List =response.productList;
    });
+  }
+
+  @override
+  void onAddToCartError(String errorTxt) {
+    // TODO: implement onAddToCartError
+    _onLoading(false);
+  }
+
+  @override
+  void onAddToCartSuccess(AddToCart response) {
+    // TODO: implement onAddToCartSuccess
+    _onLoading(false);
+    if(response.value!=null){
+      String message =response.value;
+      print(message);
+      // _presenter.getCart(TOKEN);
+      Navigator.push(context, PageTransition(type:PageTransitionType.custom, duration: Duration(seconds: 0), child: CheckoutSummaryScreen()));
+    }
   }
 
 }

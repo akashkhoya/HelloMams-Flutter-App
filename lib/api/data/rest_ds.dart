@@ -13,7 +13,7 @@ import 'package:beinglearners/model/sub_category.dart';
 
 class RestDataSource {
   NetworkUtil _netUtil = new NetworkUtil();
-  static final BASE_URL = 'http://hellomams.com:36115';
+  static final BASE_URL = 'http://hellomams.com';
 
   Future<LoginData> clientSignin(String query) {
     Map<String, String> headers = {
@@ -113,6 +113,16 @@ class RestDataSource {
     };
 
     return _netUtil.get(BASE_URL+'/api/Account/GetAllMyOrders',headers: headers).then((dynamic res) {
+      return new AllOrderData.fromJson(res);
+    });
+  }
+
+  Future<AllOrderData> getAllOrderById(String token,String oderID) {
+    Map<String, String> headers = {
+      "Authorization": 'Bearer '+token,
+    };
+
+    return _netUtil.get(BASE_URL+'/api/Account/GetOrdersByOrderID?OrderID='+oderID,headers: headers).then((dynamic res) {
       return new AllOrderData.fromJson(res);
     });
   }

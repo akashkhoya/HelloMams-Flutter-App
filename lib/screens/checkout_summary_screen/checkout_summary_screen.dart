@@ -188,8 +188,8 @@ class _CheckoutSummaryScreenState extends State<CheckoutSummaryScreen> implement
                               color: Colors.green
                           ),
                           child: new Center(
-                            child: new Text('Checkout',
-                              style: new TextStyle(color: ColorStyle().color_white,fontSize: 18,fontWeight: FontWeight.bold),),
+                            child: new Text('Place order',
+                              style: new TextStyle(color: ColorStyle().color_white,fontSize: 16,fontWeight: FontWeight.bold),),
                           ),
                         ),
 
@@ -215,87 +215,103 @@ class _CheckoutSummaryScreenState extends State<CheckoutSummaryScreen> implement
           itemBuilder: (context,index){
             return new Container(
               margin: EdgeInsets.only(left: 10,right: 10,top: 4),
-              height: 300,
+              height: 180,
               child: new Card(
-                child: new Column(
+                child: new Row(
                   children: <Widget>[
                     new Container(
-                      height: 150,
-                      width: MediaQuery.of(context).size.width,
+                      height: 160,
+                      width: MediaQuery.of(context).size.width/3,
                       child: new Image.network(RestDataSource.BASE_URL+get_cart_List[index].productImage,fit: BoxFit.fill,),
                     ),
-                   new Row(
-                     children: <Widget>[
-                       new Container(
-                         padding: EdgeInsets.only(top: 12,left: 8),
-                         child: new Text(get_cart_List[index].productTitle,
-                         style: new TextStyle(color: ColorStyle().color_dark_gray,fontSize: 16),),
-                       )
-                     ],
-                   ),
-                    new Row(
-                      children: <Widget>[
-                        new Container(
-                          padding: EdgeInsets.only(top: 8,left: 8),
-                          child: new Text('Quantity -',
-                            style: new TextStyle(color: ColorStyle().color_dark_gray,fontSize: 16,fontWeight: FontWeight.bold),),
-                        ),
-                        new Container(
-                          padding: EdgeInsets.only(top: 8,left: 8),
-                          child: new Text(get_cart_List[index].productQuantity,
-                            style: new TextStyle(color: ColorStyle().color_dark_gray,fontSize: 14),),
-                        )
-                      ],
-                    ),
-                    new Row(
-                      children: <Widget>[
-                        new Container(
-                          padding: EdgeInsets.only(top: 8,left: 8),
-                          child: new Text('servicePrice -',
-                            style: new TextStyle(color: ColorStyle().color_dark_gray,fontSize: 16,fontWeight: FontWeight.bold),),
-                        ),
-                        new Container(
-                          padding: EdgeInsets.only(top: 8,left: 8),
-                          child: new Text(get_cart_List[index].servicePrice.toString(),
-                            style: new TextStyle(color: ColorStyle().color_dark_gray,fontSize: 14),),
-                        )
-                      ],
-                    ),
-                    new Row(
-                      children: <Widget>[
-                        new Expanded(
-                            child: new Container(
-                              child: new Row(
-                                children: <Widget>[
-                                  new Container(
-                                    padding: EdgeInsets.only(top: 8,left: 8),
-                                    child: new Text('TotalAmount -',
-                                      style: new TextStyle(color: ColorStyle().color_dark_gray,fontSize: 16,fontWeight: FontWeight.bold),),
-                                  ),
-                                  new Container(
-                                    padding: EdgeInsets.only(top: 8,left: 8),
-                                    child: new Text(get_cart_List[index].totalAmount.toString(),
-                                      style: new TextStyle(color: ColorStyle().color_dark_gray,fontSize: 14),),
-                                  )
-                                ],
-                              )
-                            )),
-                        new Expanded(
-                            child: new GestureDetector(
-                              onTap: (){
-                                cart_id=get_cart_List[index].id;
-                                _onLoading(true);
-                                _presenter.getDelete(token,get_cart_List[index].id);
-                              },
-                              child: new Container(
-                                child: new Center(
-                                  child: new Text('Remove',
-                                    style: new TextStyle(color: ColorStyle().color_red,fontWeight: FontWeight.bold,fontSize: 15),),
-                                ),
-                              )
-                            ))
-                      ],
-                    )
+                   new Expanded(
+                       child: new Container(
+                         child: new Column(
+                           children: <Widget>[
+                             new Row(
+                               children: <Widget>[
+                                 new Container(
+                                   width: MediaQuery.of(context).size.width/1.7,
+                                   padding: EdgeInsets.only(top: 12,left: 8),
+                                   child: new Text(get_cart_List[index].productTitle,
+                                     style: new TextStyle(color: ColorStyle().color_dark_gray,fontSize: 15,fontWeight: FontWeight.bold),
+                                      maxLines: 2,
+                                       overflow: TextOverflow.ellipsis,),
+                                 )
+                               ],
+                             ),
+                             new Row(
+                               children: <Widget>[
+                                 new Container(
+                                   padding: EdgeInsets.only(top: 8,left: 8),
+                                   child: new Text('Quantity -',
+                                     style: new TextStyle(color: ColorStyle().color_dark_gray,fontSize: 15),),
+                                 ),
+                                 new Container(
+                                   padding: EdgeInsets.only(top: 8,left: 8),
+                                   child: new Text(get_cart_List[index].productQuantity,
+                                     style: new TextStyle(color: ColorStyle().color_dark_gray,fontSize: 14,fontWeight: FontWeight.bold),),
+                                 )
+                               ],
+                             ),
+                             new Row(
+                               children: <Widget>[
+                                 new Container(
+                                   padding: EdgeInsets.only(top: 8,left: 8),
+                                   child: new Text('servicePrice -',
+                                     style: new TextStyle(color: ColorStyle().color_dark_gray,fontSize: 15),),
+                                 ),
+                                 new Container(
+                                   padding: EdgeInsets.only(top: 8,left: 8),
+                                   child: new Text(get_cart_List[index].servicePrice.toString(),
+                                     style: new TextStyle(color: ColorStyle().color_dark_gray,fontSize: 14,fontWeight: FontWeight.bold),),
+                                 )
+                               ],
+                             ),
+                             new Container(
+                                 child: new Row(
+                                   children: <Widget>[
+                                     new Container(
+                                       padding: EdgeInsets.only(top: 8,left: 8),
+                                       child: new Text('TotalAmount -',
+                                         style: new TextStyle(color: ColorStyle().color_dark_gray,fontSize: 15),),
+                                     ),
+                                     new Container(
+                                       padding: EdgeInsets.only(top: 8,left: 8),
+                                       child: new Text(get_cart_List[index].totalAmount.toString(),
+                                         style: new TextStyle(color: ColorStyle().color_dark_gray,fontSize: 14,fontWeight: FontWeight.bold),),
+                                     )
+                                   ],
+                                 )
+                             ),
+                             new Row(
+                               children: <Widget>[
+                                 new GestureDetector(
+                                     onTap: (){
+                                       cart_id=get_cart_List[index].id;
+                                       _onLoading(true);
+                                       _presenter.getDelete(token,get_cart_List[index].id);
+                                     },
+                                     child: new Container(
+                                       height: 30,
+                                       width: 80,
+                                       decoration: BoxDecoration(
+                                         borderRadius: BorderRadius.all(Radius.circular(6)),
+                                         color: Colors.black26
+                                       ),
+                                       padding: EdgeInsets.only(left: 10),
+                                       margin: EdgeInsets.only(top: 6),
+                                       child: new Center(
+                                         child: new Text('Remove',
+                                           style: new TextStyle(color: ColorStyle().color_red,fontWeight: FontWeight.bold,fontSize: 13),),
+                                       ),
+                                     )
+                                 )
+                               ],
+                             )
+                           ],
+                         ),
+                       ))
                   ],
                 ),
 
@@ -321,16 +337,18 @@ class _CheckoutSummaryScreenState extends State<CheckoutSummaryScreen> implement
     // TODO: implement onGetCartError
     _onLoading(false);
     print(errorTxt);
-   /* Fluttertoast.showToast(
-        msg: "Your session has been expire",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
-    logout();*/
+    if(errorTxt=="Exception: 401"){
+      Fluttertoast.showToast(
+          msg: "Session has been expire Please login again..",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red[800],
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+      Navigator.pushReplacement(context, PageTransition(type:PageTransitionType.custom, duration: Duration(seconds: 0), child: LoginPage()));
+    }
   }
 
   @override

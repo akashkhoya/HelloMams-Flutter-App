@@ -35,6 +35,7 @@ int day=0;
 int month=0;
 int year=0;
 String schedule_date='';
+String schedule_time='';
 bool slot1=true;
 bool slot2=false;
 bool slot3=false;
@@ -132,6 +133,8 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> implements CheckOut
       "cartIDs": widget.cart_id,
       "paymentGatewayID": "string",
       "paymentMethod": "Pay on Delivery",
+      "schduledDate": schedule_date,
+      "schduledTime": schedule_time,
       "transactionID": "string",
       "totalAmount": widget.total_amount,
       "address": address,
@@ -219,7 +222,7 @@ setState(() {
   slot7=false;
   slot8=false;
   slot9=false;
-  // schedule_date=now.toString()+'|'+'09:00 am - 09:30 am';
+  schedule_time='09:00 am - 09:30 am';
 });
     super.initState();
 
@@ -263,7 +266,7 @@ setState(() {
           ),
           height: 50,
           child: new Center(
-            child: new Text('Procced',
+            child: new Text('Proceed',
               style: new TextStyle(color: ColorStyle().color_white,fontSize: 18,fontWeight: FontWeight.bold),),
           ),
         ),
@@ -397,7 +400,7 @@ setState(() {
                                       slot8=false;
                                       slot9=false;
                                       // schedule_date='';
-                                      // schedule_date=schedule_date+'|'+'09:00 am - 09:30 am';
+                                      schedule_time='09:00 am - 09:30 am';
                                     });
                                   },
                                   child: new Container(
@@ -430,7 +433,7 @@ setState(() {
                                       slot8=false;
                                       slot9=false;
                                       // schedule_date='';
-                                      // schedule_date=schedule_date+'|'+'10:00 am - 10:30 am';
+                                      schedule_time= '10:00 am - 10:30 am';
                                     });
                                   },
                                   child: new Container(
@@ -467,7 +470,7 @@ setState(() {
                                       slot8=false;
                                       slot9=false;
                                       // schedule_date='';
-                                      // schedule_date=schedule_date+'|'+'11:00 am - 11:30 am';
+                                      schedule_time='11:00 am - 11:30 am';
                                     });
                                   },
                                   child: new Container(
@@ -499,7 +502,7 @@ setState(() {
                                       slot8=false;
                                       slot9=false;
                                       // schedule_date='';
-                                      // schedule_date=schedule_date+'|'+'01:00 pm - 01:30 pm';
+                                      schedule_date='01:00 pm - 01:30 pm';
                                     });
                                   },
                                   child: new Container(
@@ -536,7 +539,7 @@ setState(() {
                                       slot8=false;
                                       slot9=false;
                                       // schedule_date='';
-                                      // schedule_date=schedule_date+'|'+'02:00 pm - 02:30 pm';
+                                      schedule_time='02:00 pm - 02:30 pm';
                                     });
                                   },
                                   child: new Container(
@@ -568,7 +571,7 @@ setState(() {
                                       slot8=false;
                                       slot9=false;
                                       // schedule_date='';
-                                      // schedule_date=schedule_date+'|'+'03:00 pm - 03:30 pm';
+                                      schedule_time='03:00 pm - 03:30 pm';
                                     });
                                   },
                                   child: new Container(
@@ -605,7 +608,7 @@ setState(() {
                                       slot8=false;
                                       slot9=false;
                                       // schedule_date='';
-                                      // schedule_date=schedule_date+'|'+'04:00 pm - 04:30 pm';
+                                      schedule_time='04:00 pm - 04:30 pm';
                                     });
                                   },
                                   child: new Container(
@@ -637,7 +640,7 @@ setState(() {
                                       slot8=true;
                                       slot9=false;
                                       // schedule_date='';
-                                      // schedule_date=schedule_date+'|'+'05:00 pm - 05:30 pm';
+                                      schedule_time='05:00 pm - 05:30 pm';
                                     });
                                   },
                                   child: new Container(
@@ -672,7 +675,7 @@ setState(() {
                                   slot8=false;
                                   slot9=true;
                                   // schedule_date='';
-                                  // schedule_date=schedule_date+'|'+'06:00 pm - 06:30 pm';
+                                  schedule_time='06:00 pm - 06:30 pm';
                                 });
                               },
                               child: new Container(
